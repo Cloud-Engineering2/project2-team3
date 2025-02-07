@@ -1,6 +1,5 @@
 package ce3.wbc.dto;
 
-
 import ce3.wbc.entity.Comment;
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.entity.User;
@@ -56,7 +55,3 @@ public class CommentDto {
     
 
 }
-
-
-
-

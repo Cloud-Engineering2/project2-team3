@@ -36,5 +36,4 @@ public class Address {
         return new Address(city, street, zipcode);
     }
 
-
 }

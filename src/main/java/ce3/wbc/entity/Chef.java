@@ -18,12 +18,13 @@ public class Chef {
 
     @Column(name = "chef_name", nullable = false)
     private String chefName;
-    @Column(name = "chef_category", nullable = false)
+
+    @Column(name = "chef_category")
     private String chefCategory;
+    
     @Column(name = "chef_image")
     private String chefImage;
-
-
+    
     public static Chef of(String chefName, String chefCategory, String chefImage) {
         return new Chef(null,chefName, chefCategory, chefImage);
     }

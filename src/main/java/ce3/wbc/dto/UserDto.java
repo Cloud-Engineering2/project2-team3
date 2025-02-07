@@ -2,6 +2,10 @@ package ce3.wbc.dto;
 
 import ce3.wbc.entity.User;
 import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 /**
  * DTO for {@link ce3.wbc.entity.User}

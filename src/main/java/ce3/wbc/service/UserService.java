@@ -23,11 +23,5 @@ public class UserService {
 		return user;
 	}
     
-//    public UserDto getUserDto(Integer uId) {
-//    	User user = userRepository.findById(uId)
-//			  	.orElseThrow(() -> new EntityNotFoundException("User not found with id: " + uId));
-//    	UserDto userDto = UserDto.toDto(user);
-//		return userDto;
-//	}
 
 }

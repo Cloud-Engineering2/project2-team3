@@ -1,5 +1,6 @@
 package ce3.wbc.controller.rto.request;
 
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -16,3 +17,4 @@ public class ChefReq {
     @NotBlank(message = "chefCategory 필수 입력 값입니다.")
     private String chefCategory;
 }
+

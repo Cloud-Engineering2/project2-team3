@@ -1,7 +1,10 @@
 package ce3.wbc.dto;
 
 import ce3.wbc.entity.Chef;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for {@link ce3.wbc.entity.Chef}
@@ -35,5 +38,4 @@ public class ChefDto  {
                 chefDto.getChefImage()
         );
     }
-
 }

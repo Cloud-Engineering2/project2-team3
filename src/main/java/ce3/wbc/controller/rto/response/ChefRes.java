@@ -24,6 +24,4 @@ public class ChefRes {
                 .chefImage(chefDto.getChefImage())
                 .build();
     }
-
-
 }

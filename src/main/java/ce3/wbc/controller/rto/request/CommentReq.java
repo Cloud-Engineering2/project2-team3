@@ -29,4 +29,3 @@ public class CommentReq {
     private Integer uId;
 
 }
-
