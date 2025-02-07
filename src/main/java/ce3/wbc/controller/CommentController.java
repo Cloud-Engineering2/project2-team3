@@ -68,6 +68,7 @@ class CommentUpdateReq {
 public class CommentController {
 
     private final CommentService commentService;
+
     private final RestaurantService restaurantService;
     private final UserService userService;
     
@@ -190,7 +191,5 @@ public class CommentController {
 //        	return ResponseEntity.internalServerError().build(); // 500
 //        }
     }
-    
-
 
 }

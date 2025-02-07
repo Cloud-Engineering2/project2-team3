@@ -17,4 +17,5 @@ public class UserReq {
     private String userPassword;
     @NotBlank(message = "userId 필수 입력 값입니다.")
     private String userId;
+
 }

@@ -24,7 +24,7 @@ public class Chef {
     
     @Column(name = "chef_image")
     private String chefImage;
-    
+
     public static Chef of(String chefName, String chefCategory, String chefImage) {
         return new Chef(null,chefName, chefCategory, chefImage);
     }

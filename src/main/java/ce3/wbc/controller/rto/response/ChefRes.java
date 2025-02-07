@@ -13,6 +13,7 @@ public class ChefRes {
     private String chefCategory;
     private String chefImage;
 
+
     public static ChefRes toResponse(ChefDto chefDto) {
         if (chefDto == null) {
             return null;

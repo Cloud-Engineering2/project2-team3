@@ -33,7 +33,6 @@ public class CommentDto {
     	return of(null, commContent, commStar, restId, userDto);
     }
     
-
     public static CommentDto toCommentDto(Comment comment) {
         return CommentDto.builder()
                 .commId(comment.getCommId())
@@ -52,6 +51,5 @@ public class CommentDto {
                 user // 주소값
         );
     }
-    
-
 }
+

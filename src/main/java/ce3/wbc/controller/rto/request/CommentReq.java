@@ -20,10 +20,13 @@ import lombok.NoArgsConstructor;
 public class CommentReq {
     @NotBlank(message = "댓글내용을 입력해주세요.")
     private String commContent;
+    
     @NotBlank(message = "별점은 필수 입력 값입니다.")
     private String commStar;
+    
     @NotNull
     private Integer restId;
+    
     @NotNull
     @JsonProperty("uId")
     private Integer uId;

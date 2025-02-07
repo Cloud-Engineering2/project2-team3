@@ -1,4 +1,5 @@
 package ce3.wbc.service;
+
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.repository.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;

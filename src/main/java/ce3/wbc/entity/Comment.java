@@ -18,7 +18,6 @@ public class Comment extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comm_id")
     private Integer commId;
-    
     @Column(name = "comm_content", nullable = false)
     private String commContent;
 
@@ -57,3 +56,4 @@ public class Comment extends AuditingFields {
     }
 
 }
+

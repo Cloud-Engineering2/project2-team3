@@ -35,5 +35,4 @@ public class Address {
     public static Address of(String city, String street, String zipcode) {
         return new Address(city, street, zipcode);
     }
-
 }

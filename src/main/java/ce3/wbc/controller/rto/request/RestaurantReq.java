@@ -27,4 +27,5 @@ public class RestaurantReq {
 
     @NotBlank(message = "chefName은 필수 입력 값입니다.")
     private String chefName;
+
 }
