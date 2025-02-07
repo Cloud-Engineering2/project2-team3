@@ -24,20 +24,33 @@ repositories {
 }
 
 dependencies {
+    //spring basic
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    //test
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    //awsV2
     implementation platform('software.amazon.awssdk:bom:2.27.21')
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2'
     implementation 'software.amazon.awssdk:s3'
