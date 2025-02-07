@@ -1,15 +1,13 @@
 package ce3.wbc.dto;
 
 import ce3.wbc.entity.User;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 /**
  * DTO for {@link ce3.wbc.entity.User}
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
 public class UserDto  {
@@ -19,6 +17,10 @@ public class UserDto  {
     private  String userId;
 
     public static UserDto toDto(User user) {
+        if(user == null) {
+            return new UserDto(-1,"없어용","password", "nouser");
+        }
+
         return UserDto.builder()
                 .uId(user.getUId())
                 .userName(user.getUserName())

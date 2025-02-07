@@ -17,11 +17,11 @@ public class User {
     @Column(name = "u_id")
     private Integer uId;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private String userName;
-    @Column(name = "user_password")
+    @Column(name = "user_password", nullable = false)
     private String userPassword;
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
     public static User of(String userName, String userPassword, String userId) {

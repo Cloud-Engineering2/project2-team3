@@ -1,5 +1,6 @@
 package ce3.wbc.entity.attribute;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @EntityListeners(value = { AuditingEntityListener.class })
 public class AuditingFields {
     @CreatedDate
+    @Column(updatable = false)
     protected LocalDateTime createdDate;
 
     @LastModifiedDate
