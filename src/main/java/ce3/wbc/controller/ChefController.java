@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/chefs")
@@ -23,5 +24,12 @@ public class ChefController {
         List<ChefRes> chefs = chefService.getAllChefs();
         model.addAttribute("chefs", chefs);
         return "chefs";
+    }
+
+    @GetMapping("/groupedByCategory")
+    public String getChefsGroupedByCategory(Model model) {
+        Map<String, List<ChefRes>> groupedChefs = chefService.getChefsGroupedByCategory();
+        model.addAttribute("groupedChefs", groupedChefs);
+        return "groupedByCategory";
     }
 }

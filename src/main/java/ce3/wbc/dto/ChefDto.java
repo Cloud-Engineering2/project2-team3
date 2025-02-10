@@ -36,5 +36,4 @@ public class ChefDto  {
                 chefDto.getChefImage()
         );
     }
-
 }
