@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WBC</title>
+    <style>
+      body {
+          font-family: 'Nanum Gothic', sans-serif;
+          background-color: #f0f0f0;
+          margin: 0;
+          padding: 20px;
+          color: #333;
+      }
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          overflow: hidden;
+      }
+      .header {
+          display: flex;
+          padding: 20px;
+      }
+      .photo-gallery {
+          width: 30%;
+          margin-right: 20px;
+      }
+      .main-photo {
+          width: 100%;
+          height: 300px;
+          object-fit: cover;
+          border-radius: 5px;
+          margin-bottom: 10px;
+      }
+      .thumbnail-container {
+          display: flex;
+          gap: 10px;
+      }
+      .thumbnail {
+          width: 60px;
+          height: 60px;
+          object-fit: cover;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+      .restaurant-info {
+          width: 70%;
+      }
+      .info-item {
+          margin-bottom: 10px;
+      }
+      .info-label {
+          font-weight: bold;
+          margin-right: 10px;
+      }
+      .comments-section {
+          padding: 20px;
+          background-color: #f9f9f9;
+      }
+      .comment {
+          background-color: white;
+          border-radius: 5px;
+          padding: 15px;
+          margin-bottom: 15px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+      .comment-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+      }
+      .comment-author {
+          font-weight: bold;
+      }
+      .comment-date {
+          color: #777;
+      }
+      @media (max-width: 768px) {
+          .header {
+              flex-direction: column;
+          }
+          .photo-gallery, .restaurant-info {
+              width: 100%;
+              margin-right: 0;
+              margin-bottom: 20px;
+          }
+      }
+      .comment-form {
+          display: flex;
+          margin-bottom: 20px;
+      }
+      .comment-form form {
+          display: flex;
+          width: 100%;
+      }
+      .comment-form input[type="text"] {
+          flex-grow: 1;
+          margin-right: 10px;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
+      .comment-form button {
+          padding: 10px 20px;
+          background-color: #333;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+      .comment-form button:hover {
+          background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="photo-gallery">
+          <img th:src="${restaurant.mainPhoto}" alt="Main Photo" class="main-photo" id="mainPhoto">
+          <div class="thumbnail-container">
+            <img th:each="photo : ${restaurant.photos}"
+                 th:src="${photo}"
+                 th:alt="${restaurant.name} + ' 사진'"
+                 class="thumbnail"
+                 onclick="changeMainPhoto(this.src)">
+          </div>
+        </div>
+        <div class="restaurant-info">
+          <h1 th:text="${restaurant.name}">레스토랑 이름</h1>
+          <div class="info-item">
+            <span class="info-label">셰프:</span>
+            <span th:text="${restaurant.chefName}">셰프 이름</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">주소:</span>
+            <span th:text="${restaurant.address}">레스토랑 주소</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">전화번호:</span>
+            <span th:text="${restaurant.phoneNumber}">전화번호</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">대관 여부:</span>
+            <span th:text="${restaurant.privateRoomAvailable ? '가능' : '불가능'}">대관 여부</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">단체 예약:</span>
+            <span th:text="${restaurant.groupReservationAvailable ? '가능' : '불가능'}">단체 예약 가능 여부</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">콜키지:</span>
+            <span th:text="${restaurant.corkageAllowed ? '가능' : '불가능'}">콜키지 가능 여부</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">노 키즈존:</span>
+            <span th:text="${restaurant.noKidsZone ? '예' : '아니오'}">노 키즈존 여부</span>
+          </div>
+        </div>
+      </div>
+      <div class="comments-section">
+        <div class="comment-form">
+          <form id="commentForm" th:action="@{/restaurant/{id}/comment(id=${restaurant.id})}" method="post">
+            <input type="text" name="content" placeholder="댓글" required>
+            <button type="submit">작성</button>
+          </form>
+        </div>
+        <div id="commentList">
+          <div th:each="comment : ${restaurant.comments}" class="comment">
+            <div class="comment-header">
+              <span class="comment-author" th:text="${comment.author}">작성자</span>
+              <span class="comment-date" th:text="${#temporals.format(comment.date, 'yyyy-MM-dd HH:mm')}">날짜</span>
+            </div>
+            <p th:text="${comment.content}">댓글 내용</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      function changeMainPhoto(src) {
+          document.getElementById('mainPhoto').src = src;
+      }
+
+      document.getElementById('commentForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const content = this.querySelector('input[name="content"]').value;
+          if (!content.trim()) return;
+
+          fetch(this.action, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ content: content })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  addNewComment(data.comment);
+                  this.reset();
+              } else {
+                  alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('오류가 발생했습니다. 나중에 다시 시도해주세요.');
+          });
+      });
+
+      function addNewComment(comment) {
+          const commentList = document.getElementById('commentList');
+          const newComment = document.createElement('div');
+          newComment.className = 'comment';
+          newComment.innerHTML = `
+              <div class="comment-header">
+                  <span class="comment-author">${comment.author}</span>
+                  <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
+              </div>
+              <p>${comment.content}</p>
+          `;
+          commentList.insertBefore(newComment, commentList.firstChild);
+      }
+    </script>
+  </body>
+</html>
+
