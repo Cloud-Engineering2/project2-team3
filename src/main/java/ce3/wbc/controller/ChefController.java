@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import ce3.wbc.service.ChefService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,16 @@ public class ChefController {
         model.addAttribute("chefs", chefs);
         return "chefs";
     }
+<<<<<<< HEAD
 }
 >>>>>>> b1ca310 (:sparkles: feat: add chefs-read)
+=======
+
+    @GetMapping("/groupedByCategory")
+    public String getChefsGroupedByCategory(Model model) {
+        Map<String, List<ChefRes>> groupedChefs = chefService.getChefsGroupedByCategory();
+        model.addAttribute("groupedChefs", groupedChefs);
+        return "groupedByCategory";
+    }
+}
+>>>>>>> bd0f906 (:sparkles: feat: add chefs-read)

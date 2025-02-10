@@ -6,6 +6,7 @@ import lombok.*;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 @Getter
 @Builder
 public class ChefRes {
