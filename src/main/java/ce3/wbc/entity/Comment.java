@@ -32,7 +32,7 @@ public class Comment extends AuditingFields {
     private Restaurant restaurant;
 
     //연관 관계
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "user_id", nullable = true)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User user;
@@ -47,6 +47,13 @@ public class Comment extends AuditingFields {
 		this.commStar = commStar;
     	return null;
     	
+    }
+    
+    public void assignToRestaurant(Restaurant restaurant) {
+        if (restaurant == null) {
+            throw new IllegalArgumentException("댓글은 반드시 특정 레스토랑에 속해야 합니다.");
+        }
+        this.restaurant = restaurant;
     }
 
 }

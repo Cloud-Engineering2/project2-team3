@@ -1,5 +1,6 @@
 package ce3.wbc.dto;
 
+import ce3.wbc.entity.Chef;
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.entity.attribute.Address;
 import lombok.*;
@@ -52,27 +53,27 @@ public class RestaurantDto {
 
     }
     
-    public static RestaurantDto toDto(Restaurant restaurant,Integer a) {
-        if(restaurant == null) {
-            return new RestaurantDto(-1,"없어용", "default.jpg","번호없음" ,Address.of("","",""),
-                    false,false,false,false,ChefDto.toDto(null), new ArrayList<>());
-        }
-        return RestaurantDto.builder()
-                .restId(restaurant.getRestId())
-                .restName(restaurant.getRestName())
-                .restImg(restaurant.getRestImg())
-                .restPhone(restaurant.getRestPhone())
-                .address(restaurant.getAddress())
-                .restRental(restaurant.isRestRental())
-                .groupReservation(restaurant.isGroupReservation())
-                .corkage(restaurant.isCorkage())
-                .noKidsZone(restaurant.isNoKidsZone())
-                .chefDto(ChefDto.toDto(restaurant.getChef()))
-                .build();
+//    public static RestaurantDto toDto(Restaurant restaurant,Integer a) {
+//        if(restaurant == null) {
+//            return new RestaurantDto(-1,"없어용", "default.jpg","번호없음" ,Address.of("","",""),
+//                    false,false,false,false,ChefDto.toDto(null), new ArrayList<>());
+//        }
+//        return RestaurantDto.builder()
+//                .restId(restaurant.getRestId())
+//                .restName(restaurant.getRestName())
+//                .restImg(restaurant.getRestImg())
+//                .restPhone(restaurant.getRestPhone())
+//                .address(restaurant.getAddress())
+//                .restRental(restaurant.isRestRental())
+//                .groupReservation(restaurant.isGroupReservation())
+//                .corkage(restaurant.isCorkage())
+//                .noKidsZone(restaurant.isNoKidsZone())
+//                .chefDto(ChefDto.toDto(restaurant.getChef()))
+//                .build();
+//
+//    }
 
-    }
-
-    public static Restaurant toEntity(RestaurantDto restaurantDto, ChefDto chefDto) {
+    public static Restaurant toEntity(RestaurantDto restaurantDto, Chef chef) {
         return Restaurant.of(
                 restaurantDto.getRestName(),
                 restaurantDto.getRestImg(),
@@ -82,32 +83,26 @@ public class RestaurantDto {
                 restaurantDto.isGroupReservation(),
                 restaurantDto.isCorkage(),
                 restaurantDto.isNoKidsZone(),
-                ChefDto.toEntity(chefDto),
-                restaurantDto.getComments() != null
-                        ? restaurantDto.getComments().stream()
-                        .map(CommentDto::toEntity)  // ✅ CommentDto → Comment 변환
-                        .collect(Collectors.toList())
-                        : new ArrayList<>()
+                chef,
+                new ArrayList<>()
 
         );
     }
-    public static Restaurant toEntity(RestaurantDto restaurantDto) {
-        return Restaurant.of(
-                restaurantDto.getRestName(),
-                restaurantDto.getRestImg(),
-                restaurantDto.getRestPhone(),
-                restaurantDto.getAddress(),
-                restaurantDto.isRestRental(),
-                restaurantDto.isGroupReservation(),
-                restaurantDto.isCorkage(),
-                restaurantDto.isNoKidsZone(),
-                restaurantDto.getChefDto() != null ? ChefDto.toEntity(restaurantDto.getChefDto()) : null,
-                restaurantDto.getComments() != null
-                        ? restaurantDto.getComments().stream()
-                        .map(CommentDto::toEntity)  // ✅ CommentDto → Comment 변환
-                        .collect(Collectors.toList())
-                        : new ArrayList<>()
-        );
-    }
+    
+    
+//    public static Restaurant toEntity(RestaurantDto restaurantDto) {
+//        return Restaurant.of(
+//                restaurantDto.getRestName(),
+//                restaurantDto.getRestImg(),
+//                restaurantDto.getRestPhone(),
+//                restaurantDto.getAddress(),
+//                restaurantDto.isRestRental(),
+//                restaurantDto.isGroupReservation(),
+//                restaurantDto.isCorkage(),
+//                restaurantDto.isNoKidsZone(),
+//                restaurantDto.getChefDto() != null ? ChefDto.toEntity(restaurantDto.getChefDto()) : null,
+//                new ArrayList<>()
+//        );
+//    }
 
 }

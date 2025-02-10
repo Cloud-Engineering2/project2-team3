@@ -24,6 +24,7 @@ import ce3.wbc.dto.CommentDto;
 import ce3.wbc.dto.UserDto;
 import ce3.wbc.entity.Comment;
 import ce3.wbc.entity.Restaurant;
+import ce3.wbc.entity.User;
 import ce3.wbc.repository.RestaurantRepository;
 import ce3.wbc.service.CommentService;
 import ce3.wbc.service.RestaurantService;
@@ -75,41 +76,37 @@ public class CommentController {
     
     /************************************************** 댓글 등록 **************************************************/
     @PostMapping // localhost:8080/replies
-    public ResponseEntity<String> registerComment(@RequestBody @Valid CommentReq commentReq, BindingResult bindingResult) {
+    public ResponseEntity<Void> registerComment(@RequestBody @Valid CommentReq commentReq, BindingResult bindingResult) {
 
 		// 요청 유효성 검사
-		if (bindingResult.hasErrors()) {   
-
+		if (bindingResult.hasErrors()) { 
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400                                 
 		}
 		
 		// 댓글과 별점
 	    String content = commentReq.getCommContent();
 	    String star = commentReq.getCommStar();
-	    System.out.println(star);
         
-        try {
-        	// 작성자 401에러??
+
+        	// 작성자 401에러?? : HttpStatus.UNAUTHORIZED
     	    Integer uId = commentReq.getUId();
     	    
-    	    UserDto userDto = userService.getUserDto(uId);
+    	    User user = userService.getUser(uId);
+    	    System.out.println(user.getUserName()); // ce3.wbc.entity.User@6eef4a21
+    	    UserDto userDto = UserDto.toDto(user);
+    	    System.out.println(userDto.getUserName()); //ce3.wbc.dto.UserDto@26d3f8dd
 
     	    // 식당
             Integer restId = commentReq.getRestId();
-            Restaurant restaurant = restaurantService.getRestaurant(restId);
             
             // 댓글 생성
-            CommentDto commentDto = CommentDto.of(content, star, restaurant, userDto);
+            CommentDto commentDto = CommentDto.of(content, star, restId, userDto);
+            System.out.println(commentDto.getUserDto().getUId());
             
         	// DB에 저장
         	commentService.addComment(commentDto);
         	return ResponseEntity.ok().build(); // 200
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
-        	return ResponseEntity.internalServerError().build(); // 500
-        }
+
         
     }
     
@@ -126,7 +123,7 @@ public class CommentController {
         */       
         
         
-        try {
+//        try {
         	List<CommentDto> comments = commentService.getComments(restId);
         	
         	List<CommentRes> response = comments.stream()
@@ -134,14 +131,14 @@ public class CommentController {
                     .collect(Collectors.toList());
             
             return ResponseEntity.ok(response); // 200 
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
-        } catch (NumberFormatException e) {
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400
-        } catch (Exception e) {
-        	return ResponseEntity.internalServerError().build(); // 500
-        }
-        
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
+//        } catch (NumberFormatException e) {
+//        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400
+//        } catch (Exception e) {
+//        	return ResponseEntity.internalServerError().build(); // 500
+//        }
+//        
         
         
         
@@ -158,18 +155,18 @@ public class CommentController {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400                                 
 	    }
     	
-        try {
+//        try {
         	CommentDto commentDto = commentService.updateComment(commId, commentUpdateReq.getCommContent(), commentUpdateReq.getCommStar());
             CommentRes response = CommentRes.toResponse(commentDto);
             
             return ResponseEntity.ok(response); // 200 
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
-        } catch (NumberFormatException e) {
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400
-        } catch (Exception e) {
-        	return ResponseEntity.internalServerError().build(); // 500
-        }
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
+//        } catch (NumberFormatException e) {
+//        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400
+//        } catch (Exception e) {
+//        	return ResponseEntity.internalServerError().build(); // 500
+//        }
     }
 
     
@@ -177,19 +174,21 @@ public class CommentController {
     
     /********************************************* 댓글 삭제: comment id *********************************************/
     @DeleteMapping("/{commId}") // localhost:8080/replies/39
-    public ResponseEntity<String> deleteComment(@PathVariable("commId") Integer commId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable("commId") Integer commId) {
     	
-        try {
-            CommentDto commentDto = commentService.deleteComment(commId);
-            return ResponseEntity.ok().build(); // 200 
+//        try {
+//            CommentDto commentDto = commentService.deleteComment(commId);
+            Boolean isDeleted = commentService.deleteComment(commId);
+            return ResponseEntity.noContent().build();
             
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
-        } catch (NumberFormatException e) {
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400
-        } catch (Exception e) {
-        	return ResponseEntity.internalServerError().build(); // 500
-        }
+            
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404
+//        } catch (NumberFormatException e) {
+//        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400
+//        } catch (Exception e) {
+//        	return ResponseEntity.internalServerError().build(); // 500
+//        }
     }
     
 

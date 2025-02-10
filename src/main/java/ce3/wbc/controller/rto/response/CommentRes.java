@@ -13,6 +13,7 @@ public class CommentRes {
     private String commStar;
 //    private RestaurantRes restaurant;
     private UserRes user;
+//    private String status;
 
     public static CommentRes toResponse(CommentDto commentDto) {
         if (commentDto == null) {
@@ -26,5 +27,11 @@ public class CommentRes {
                 .user(UserRes.toResponse(commentDto.getUserDto()))
                 .build();
     }
+    
+//    public static CommentRes toResponse(String status) {
+//    	return CommentRes.builder()
+//    					 .status(status)
+//    					 .build();
+//    }
 
 }
