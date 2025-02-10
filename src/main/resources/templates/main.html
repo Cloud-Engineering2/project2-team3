@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WBC</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <style>
+      body {
+          font-family: 'Nanum Gothic', sans-serif;
+          background-color: #f0f0f0;
+          margin: 0;
+          padding: 20px;
+      }
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+      }
+      h1 {
+          text-align: center;
+          color: #333;
+      }
+      .toggle-container {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+      .toggle-btn {
+          background-color: #333;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          margin: 0 5px;
+      }
+      .toggle-btn:hover {
+          background-color: #555;
+      }
+      .chef-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 20px;
+      }
+      .chef-card {
+          background-color: white;
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          transition: transform 0.3s;
+      }
+      .chef-card:hover {
+          transform: translateY(-5px);
+      }
+      .chef-image {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+      }
+      .chef-name {
+          padding: 10px;
+          text-align: center;
+          font-weight: bold;
+      }
+      .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0,0,0,0.4);
+      }
+      .modal-content {
+          background-color: #fefefe;
+          margin: 15% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+          max-width: 600px;
+          border-radius: 10px;
+      }
+      .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+      }
+      .close:hover {
+          color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <th:block th:replace="~{header :: header}"></th:block>
+
+    <div class="container">
+      <h1>흑백 요리사</h1>
+      <div class="toggle-container">
+        <button id="toggleBlackBtn" class="toggle-btn">흑수저 요리사</button>
+        <button id="toggleWhiteBtn" class="toggle-btn">백수저 요리사</button>
+        <button id="toggleAllBtn" class="toggle-btn">전체 보기</button>
+      </div>
+
+      <div id="chefGrid" class="chef-grid">
+        <div th:each="chef : ${chefs}" th:class="${'chef-card ' + chef.type}" th:data-chef-id="${chef.id}">
+          <img th:src="${chef.images != null and not #lists.isEmpty(chef.images) ? chef.images[0] : '/default_image.png'}"
+               th:alt="${chef.name}" class="chef-image">
+          <div class="chef-name" th:text="${chef.name}">요리사 이름</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 레스토랑 모달 -->
+    <div id="restaurantModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalChefName"></h2>
+        <ul id="restaurantList"></ul>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      // DOM 요소 선택
+      const chefGrid = document.getElementById('chefGrid');
+      const toggleBlackBtn = document.getElementById('toggleBlackBtn');
+      const toggleWhiteBtn = document.getElementById('toggleWhiteBtn');
+      const toggleAllBtn = document.getElementById('toggleAllBtn');
+      const modal = document.getElementById('restaurantModal');
+      const modalChefName = document.getElementById('modalChefName');
+      const restaurantList = document.getElementById('restaurantList');
+      const closeBtn = document.querySelector('.close');
+      const chefCards = document.querySelectorAll('.chef-card');
+
+      // 요리사 필터링 함수
+      function filterChefs(type) {
+          chefCards.forEach(card => {
+              if (type === 'all' || card.classList.contains(type)) {
+                  card.style.display = 'block';
+              } else {
+                  card.style.display = 'none';
+              }
+          });
+      }
+
+      // 토글 버튼 이벤트 리스너
+      toggleBlackBtn.addEventListener('click', () => filterChefs('black'));
+      toggleWhiteBtn.addEventListener('click', () => filterChefs('white'));
+      toggleAllBtn.addEventListener('click', () => filterChefs('all'));
+
+      // 요리사 카드 클릭 이벤트
+      chefCards.forEach(card => {
+          card.addEventListener('click', () => {
+              const chefId = card.getAttribute('data-chef-id');
+              const chefName = card.querySelector('.chef-name').textContent;
+              showRestaurants(chefId, chefName);
+          });
+      });
+
+      // 레스토랑 정보 표시 함수
+      function showRestaurants(chefId, chefName) {
+          modalChefName.textContent = `${chefName}의 식당`;
+          restaurantList.innerHTML = '';
+
+          // 여기에서 실제로는 선택된 요리사의 레스토랑 정보를 가져와야 합니다
+          // 지금은 임시 메시지만 표시합니다
+          const li = document.createElement('li');
+          li.textContent = '식당 정보를 불러오는 중...';
+          restaurantList.appendChild(li);
+
+          modal.style.display = 'block';
+      }
+
+      // 모달 닫기 버튼 이벤트
+      closeBtn.addEventListener('click', () => {
+          modal.style.display = 'none';
+      });
+
+      // 모달 외부 클릭 시 닫기
+      window.addEventListener('click', (event) => {
+          if (event.target === modal) {
+              modal.style.display = 'none';
+          }
+      });
+    </script>
+  </body>
+</html>
