@@ -51,9 +51,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     //awsV2
-    implementation platform('software.amazon.awssdk:bom:2.27.21')
-    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2'
-    implementation 'software.amazon.awssdk:s3'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 
 
