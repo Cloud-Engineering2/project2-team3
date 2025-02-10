@@ -56,4 +56,7 @@ public class Restaurant {
     public static Restaurant of(String restName, String restImg, String restPhone, Address address, boolean restRental, boolean groupReservation, boolean corkage, boolean noKidsZone,Chef chef, List<Comment> comments) {
         return new Restaurant(null, restName, restImg, restPhone, address, restRental, groupReservation, corkage, noKidsZone, chef, new ArrayList<>());
     }
+     
+    
+    
 }

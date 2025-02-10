@@ -27,7 +27,7 @@ public class Comment extends AuditingFields {
 
 
     //연관 관계
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = true)
     private Restaurant restaurant;
 
@@ -40,6 +40,13 @@ public class Comment extends AuditingFields {
 
     public static Comment of(String commContent, String commStar, Restaurant restaurant, User user) {
         return new Comment(null, commContent, commStar, restaurant, user);
+    }
+    
+    public Comment update(Integer commId, String commContent, String commStar) {
+		this.commContent = commContent;
+		this.commStar = commStar;
+    	return null;
+    	
     }
 
 }

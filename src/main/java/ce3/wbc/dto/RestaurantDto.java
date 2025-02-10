@@ -51,6 +51,26 @@ public class RestaurantDto {
                 .build();
 
     }
+    
+    public static RestaurantDto toDto(Restaurant restaurant,Integer a) {
+        if(restaurant == null) {
+            return new RestaurantDto(-1,"없어용", "default.jpg","번호없음" ,Address.of("","",""),
+                    false,false,false,false,ChefDto.toDto(null), new ArrayList<>());
+        }
+        return RestaurantDto.builder()
+                .restId(restaurant.getRestId())
+                .restName(restaurant.getRestName())
+                .restImg(restaurant.getRestImg())
+                .restPhone(restaurant.getRestPhone())
+                .address(restaurant.getAddress())
+                .restRental(restaurant.isRestRental())
+                .groupReservation(restaurant.isGroupReservation())
+                .corkage(restaurant.isCorkage())
+                .noKidsZone(restaurant.isNoKidsZone())
+                .chefDto(ChefDto.toDto(restaurant.getChef()))
+                .build();
+
+    }
 
     public static Restaurant toEntity(RestaurantDto restaurantDto, ChefDto chefDto) {
         return Restaurant.of(
