@@ -23,7 +23,7 @@ public class ChefController {
     public String getAllChefs(Model model) {
         List<ChefRes> chefs = chefService.getAllChefs();
         model.addAttribute("chefs", chefs);
-        return "chefs";
+        return "main";
     }
 
     @GetMapping("/groupedByCategory")
