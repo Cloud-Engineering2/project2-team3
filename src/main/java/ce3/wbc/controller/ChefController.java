@@ -22,25 +22,11 @@ public class ChefController {
 
     private final ChefService chefService;
 
-<<<<<<< HEAD
-}
-=======
     @GetMapping
     public String getAllChefs(Model model) {
         List<ChefRes> chefs = chefService.getAllChefs();
         model.addAttribute("chefs", chefs);
         return "chefs";
     }
-<<<<<<< HEAD
-}
->>>>>>> b1ca310 (:sparkles: feat: add chefs-read)
-=======
 
-    @GetMapping("/groupedByCategory")
-    public String getChefsGroupedByCategory(Model model) {
-        Map<String, List<ChefRes>> groupedChefs = chefService.getChefsGroupedByCategory();
-        model.addAttribute("groupedChefs", groupedChefs);
-        return "groupedByCategory";
-    }
 }
->>>>>>> bd0f906 (:sparkles: feat: add chefs-read)
