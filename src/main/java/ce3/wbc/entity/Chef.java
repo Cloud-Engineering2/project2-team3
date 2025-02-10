@@ -1,10 +1,7 @@
 package ce3.wbc.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,11 +15,12 @@ public class Chef {
 
     @Column(name = "chef_name", nullable = false)
     private String chefName;
+
     @Column(name = "chef_category", nullable = false)
     private String chefCategory;
+
     @Column(name = "chef_image")
     private String chefImage;
-
 
     public static Chef of(String chefName, String chefCategory, String chefImage) {
         return new Chef(null,chefName, chefCategory, chefImage);

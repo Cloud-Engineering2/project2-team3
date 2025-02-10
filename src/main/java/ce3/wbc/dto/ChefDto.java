@@ -9,12 +9,13 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Builder
 public class ChefDto  {
-    Integer chefId;
-    String chefName;
-    String chefCategory;
-    String chefImage;
+    private Integer chefId;
+    private String chefName;
+    private String chefCategory;
+    private String chefImage;
 
     public static ChefDto toDto(Chef chef) {
         if (chef == null) {
@@ -35,5 +36,4 @@ public class ChefDto  {
                 chefDto.getChefImage()
         );
     }
-
 }
