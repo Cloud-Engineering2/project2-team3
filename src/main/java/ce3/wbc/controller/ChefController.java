@@ -3,6 +3,7 @@ package ce3.wbc.controller;
 import ce3.wbc.controller.rto.response.ChefRes;
 import ce3.wbc.dto.ChefDto;
 import ce3.wbc.service.ChefService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +16,10 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/chefs")
+@RequiredArgsConstructor
 public class ChefController {
 
-    @Autowired
-    private ChefService chefService;
+    private final ChefService chefService;
 
 <<<<<<< HEAD
 }

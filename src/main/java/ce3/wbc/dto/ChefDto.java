@@ -10,8 +10,8 @@ import lombok.AccessLevel;
 /**
  * DTO for {@link ce3.wbc.entity.Chef}
  */
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 @Builder
