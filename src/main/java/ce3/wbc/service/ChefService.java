@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -21,5 +22,11 @@ public class ChefService {
         return chefRepository.findAll().stream()
                 .map(ChefRes::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, List<ChefRes>> getChefsGroupedByCategory() {
+        return chefRepository.findAll().stream()
+                .collect(Collectors.groupingBy(Chef::getChefCategory,
+                        Collectors.mapping(ChefRes::toResponse, Collectors.toList())));
     }
 }
