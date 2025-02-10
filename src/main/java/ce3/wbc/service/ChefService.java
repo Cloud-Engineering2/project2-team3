@@ -21,7 +21,4 @@ public class ChefService {
                 .map(ChefRes::toResponse)
                 .collect(Collectors.toList());
     }
-
-
-
 }
