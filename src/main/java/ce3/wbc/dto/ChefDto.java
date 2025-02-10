@@ -6,15 +6,16 @@ import lombok.*;
 /**
  * DTO for {@link ce3.wbc.entity.Chef}
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 @Builder
 public class ChefDto  {
-    Integer chefId;
-    String chefName;
-    String chefCategory;
-    String chefImage;
+    private Integer chefId;
+    private String chefName;
+    private String chefCategory;
+    private String chefImage;
 
     public static ChefDto toDto(Chef chef) {
         if (chef == null) {
