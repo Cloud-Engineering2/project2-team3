@@ -1,11 +1,9 @@
 package ce3.wbc.entity;
 
 import ce3.wbc.entity.attribute.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,9 @@ public class Restaurant {
 
     @Column(name = "rest_img")
     private String restImg;
+
+    @Column(name = "originalImgName")
+    private String originalImgName;
 
     @Column(name = "rest_phone")
     private String restPhone;
@@ -48,12 +49,28 @@ public class Restaurant {
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chef_id")
+    @JsonIgnore
     private Chef chef;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ToString.Exclude
     private List<Comment> comments = new ArrayList<>();
 
-    public static Restaurant of(String restName, String restImg, String restPhone, Address address, boolean restRental, boolean groupReservation, boolean corkage, boolean noKidsZone,Chef chef, List<Comment> comments) {
-        return new Restaurant(null, restName, restImg, restPhone, address, restRental, groupReservation, corkage, noKidsZone, chef, new ArrayList<>());
+    //연관관계 편의 메서드
+    public void addComment(Comment comment) {
+        if (comment == null) {
+            throw new IllegalArgumentException("댓글이 null일 수 없습니다.");
+        }
+        this.comments.add(comment);
+        comment.assignToRestaurant(this); // ✅ `Comment`의 필드도 설정
+    }
+
+
+
+    public static Restaurant of(String restName, String restImg,String originalImgName, String restPhone, Address address, boolean restRental, boolean groupReservation, boolean corkage, boolean noKidsZone, Chef chef, List<Comment> comments) {
+        return new Restaurant(null, restName, restImg,originalImgName,restPhone, address, restRental, groupReservation, corkage, noKidsZone, chef,comments);
+    }
+    public static Restaurant of(Integer restId, String restName, String restImg,String originalImgName, String restPhone, Address address, boolean restRental, boolean groupReservation, boolean corkage, boolean noKidsZone,Chef chef, List<Comment> comments) {
+        return new Restaurant(restId, restName, restImg,originalImgName,restPhone, address, restRental, groupReservation, corkage, noKidsZone, chef, comments);
     }
 }

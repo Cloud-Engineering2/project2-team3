@@ -2,6 +2,7 @@ package ce3.wbc.dto;
 
 
 import ce3.wbc.entity.Comment;
+import ce3.wbc.entity.Restaurant;
 import lombok.*;
 
 /**
@@ -16,7 +17,7 @@ public class CommentDto {
     private  String commContent;
     private  String commStar;
 
-    private RestaurantDto restaurantDto;
+    private Integer restId;
     private UserDto userDto;
 
     public static CommentDto toCommentDto(Comment comment) {
@@ -24,19 +25,20 @@ public class CommentDto {
                 .commId(comment.getCommId())
                 .commContent(comment.getCommContent())
                 .commStar(comment.getCommStar())
-                .restaurantDto(RestaurantDto.toDto(comment.getRestaurant()))
+                .restId(comment.getRestaurant().getRestId())
                 .userDto(UserDto.toDto(comment.getUser()))
                 .build();
     }
 
-    public static Comment toEntity(CommentDto commentDto) {
+    public static Comment toEntity(CommentDto commentDto, Restaurant restaurant) {
         return Comment.of(
                 commentDto.getCommContent(),
                 commentDto.getCommStar(),
-                RestaurantDto.toEntity(commentDto.getRestaurantDto()),
+                restaurant,
                 UserDto.toEntity(commentDto.getUserDto())
         );
     }
+
 }
 
 
