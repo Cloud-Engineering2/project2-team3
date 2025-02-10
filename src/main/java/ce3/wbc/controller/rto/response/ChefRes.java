@@ -1,6 +1,7 @@
 package ce3.wbc.controller.rto.response;
 
 import ce3.wbc.dto.ChefDto;
+import ce3.wbc.entity.Chef;
 import lombok.*;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,4 +26,21 @@ public class ChefRes {
                 .chefImage(chefDto.getChefImage())
                 .build();
     }
+<<<<<<< HEAD
+=======
+
+    public static ChefRes toResponse(Chef chef) {
+        if (chef == null) {
+            return null;
+        }
+        return ChefRes.builder()
+                .chefId(chef.getChefId())
+                .chefName(chef.getChefName())
+                .chefCategory(chef.getChefCategory())
+                .chefImage(chef.getChefImage())
+                .build();
+    }
+
+
+>>>>>>> 0d64858 (:pencil2: fix: fix chefs-read)
 }

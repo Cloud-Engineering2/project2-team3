@@ -1,5 +1,6 @@
 package ce3.wbc.controller;
 
+import ce3.wbc.controller.rto.response.ChefRes;
 import ce3.wbc.dto.ChefDto;
 import ce3.wbc.service.ChefService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ChefController {
 =======
     @GetMapping
     public String getAllChefs(Model model) {
-        List<ChefDto> chefs = chefService.getAllChefs();
+        List<ChefRes> chefs = chefService.getAllChefs();
         model.addAttribute("chefs", chefs);
         return "chefs";
     }
