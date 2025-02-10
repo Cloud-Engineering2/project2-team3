@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> -->
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,9 +49,17 @@
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           cursor: pointer;
           transition: transform 0.3s;
+          border: 3px solid transparent; /* 기본 테두리 추가 */
       }
       .chef-card:hover {
           transform: translateY(-5px);
+      }
+      .chef-card.border-B {
+          border-color: black;
+      }
+      .chef-card.border-W {
+          border-color: white;
+          box-shadow: 0 0 0 1px #ccc;
       }
       .chef-image {
           width: 100%;
@@ -94,8 +102,8 @@
       }
     </style>
   </head>
-  <body>
-    <th:block th:replace="~{header :: header}"></th:block>
+    <body>
+    <!--    <th:block th:replace="~{header :: header}"></th:block>-->
 
     <div class="container">
       <h1>흑백 요리사</h1>
@@ -106,10 +114,10 @@
       </div>
 
       <div id="chefGrid" class="chef-grid">
-        <div th:each="chef : ${chefs}" th:class="${'chef-card ' + chef.type}" th:data-chef-id="${chef.id}">
-          <img th:src="${chef.images != null and not #lists.isEmpty(chef.images) ? chef.images[0] : '/default_image.png'}"
-               th:alt="${chef.name}" class="chef-image">
-          <div class="chef-name" th:text="${chef.name}">요리사 이름</div>
+        <div th:each="chef : ${chefs}" th:class="${'chef-card ' + chef.chefCategory}" th:data-chef-id="${chef.chefId}">
+          <img th:src="${chef.chefImage}"
+               th:alt="${chef.chefName}" class="chef-image">
+          <div class="chef-name" th:text="${chef.chefName}">요리사 이름</div>
         </div>
       </div>
     </div>
@@ -124,21 +132,60 @@
     </div>
 
     <script th:inline="javascript">
-      // DOM 요소 선택
-      const chefGrid = document.getElementById('chefGrid');
-      const toggleBlackBtn = document.getElementById('toggleBlackBtn');
-      const toggleWhiteBtn = document.getElementById('toggleWhiteBtn');
-      const toggleAllBtn = document.getElementById('toggleAllBtn');
       const modal = document.getElementById('restaurantModal');
       const modalChefName = document.getElementById('modalChefName');
       const restaurantList = document.getElementById('restaurantList');
       const closeBtn = document.querySelector('.close');
-      const chefCards = document.querySelectorAll('.chef-card');
+      const toggleBlackBtn = document.getElementById('toggleBlackBtn');
+      const toggleWhiteBtn = document.getElementById('toggleWhiteBtn');
+      const toggleAllBtn = document.getElementById('toggleAllBtn');
 
-      // 요리사 필터링 함수
-      function filterChefs(type) {
-          chefCards.forEach(card => {
-              if (type === 'all' || card.classList.contains(type)) {
+      document.addEventListener("DOMContentLoaded", () => {
+          // 토글 버튼 이벤트 리스너 설정
+          setupToggleButtons();
+
+          fetch('/chefs')
+              .then(response => response.json())
+              .then(data => {
+                  const chefGrid = document.getElementById('chefGrid');
+                  chefGrid.innerHTML = ''; // 기존 내용 초기화
+
+                  data.forEach(chef => {
+                      const card = document.createElement('div');
+                      card.classList.add('chef-card', chef.chefCategory);
+                      card.setAttribute('data-chef-id', chef.chefId);
+
+                      const img = document.createElement('img');
+                      img.src = chef.chefImage;
+                      img.alt = chef.chefName;
+                      img.classList.add('chef-image');
+
+                      const name = document.createElement('div');
+                      name.classList.add('chef-name');
+                      name.textContent = chef.chefName;
+
+                      card.appendChild(img);
+                      card.appendChild(name);
+                      chefGrid.appendChild(card);
+
+                      card.addEventListener('click', () => {
+                          showRestaurants(chef.chefId, chef.chefName);
+                      });
+                  });
+              })
+              .catch(error => console.error('요리사 정보를 불러오는 중 오류 발생:', error));
+      });
+
+      function setupToggleButtons() {
+          toggleBlackBtn.addEventListener('click', () => filterChefs('B'));
+          toggleWhiteBtn.addEventListener('click', () => filterChefs('W'));
+          toggleAllBtn.addEventListener('click', () => filterChefs('all'));
+      }
+
+      function filterChefs(category) {
+          const cards = document.querySelectorAll('.chef-card');
+          cards.forEach(card => {
+              if (category === 'all' || card.classList.contains(category)) {
                   card.style.display = 'block';
               } else {
                   card.style.display = 'none';
@@ -146,38 +193,42 @@
           });
       }
 
-      // 토글 버튼 이벤트 리스너
-      toggleBlackBtn.addEventListener('click', () => filterChefs('black'));
-      toggleWhiteBtn.addEventListener('click', () => filterChefs('white'));
-      toggleAllBtn.addEventListener('click', () => filterChefs('all'));
-
-      // 요리사 카드 클릭 이벤트
-      chefCards.forEach(card => {
-          card.addEventListener('click', () => {
-              const chefId = card.getAttribute('data-chef-id');
-              const chefName = card.querySelector('.chef-name').textContent;
-              showRestaurants(chefId, chefName);
-          });
-      });
-
       // 레스토랑 정보 표시 함수
       function showRestaurants(chefId, chefName) {
           modalChefName.textContent = `${chefName}의 식당`;
           restaurantList.innerHTML = '';
 
-          // 여기에서 실제로는 선택된 요리사의 레스토랑 정보를 가져와야 합니다
-          // 지금은 임시 메시지만 표시합니다
-          const li = document.createElement('li');
-          li.textContent = '식당 정보를 불러오는 중...';
-          restaurantList.appendChild(li);
+          fetch(`/restaurants/${chefId}`)
+              .then(response => response.json())
+              .then(restaurants => {
+                  if (restaurants.length === 0) {
+                      const li = document.createElement('li');
+                      li.textContent = '등록된 식당이 없습니다.';
+                      restaurantList.appendChild(li);
+                  } else {
+                      restaurants.forEach(restaurant => {
+                          const li = document.createElement('li');
+                          li.textContent = restaurant.name;
+                          restaurantList.appendChild(li);
+                      });
+                  }
+              })
+              .catch(error => {
+                  console.error('레스토랑 정보를 불러오는 중 오류 발생:', error);
+                  const li = document.createElement('li');
+                  li.textContent = '식당 정보를 불러오는데 실패했습니다.';
+                  restaurantList.appendChild(li);
+              });
 
           modal.style.display = 'block';
       }
 
-      // 모달 닫기 버튼 이벤트
-      closeBtn.addEventListener('click', () => {
-          modal.style.display = 'none';
-      });
+      // 모달 닫기 이벤트
+      if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+              modal.style.display = 'none';
+          });
+      }
 
       // 모달 외부 클릭 시 닫기
       window.addEventListener('click', (event) => {
