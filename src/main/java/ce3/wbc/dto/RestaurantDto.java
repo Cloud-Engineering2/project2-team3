@@ -1,5 +1,6 @@
 package ce3.wbc.dto;
 
+import ce3.wbc.entity.Chef;
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.entity.attribute.Address;
 import lombok.*;
@@ -52,7 +53,7 @@ public class RestaurantDto {
 
     }
 
-    public static Restaurant toEntity(RestaurantDto restaurantDto, ChefDto chefDto) {
+    public static Restaurant toEntity(RestaurantDto restaurantDto, Chef chef) {
         return Restaurant.of(
                 restaurantDto.getRestName(),
                 restaurantDto.getRestImg(),
@@ -62,32 +63,11 @@ public class RestaurantDto {
                 restaurantDto.isGroupReservation(),
                 restaurantDto.isCorkage(),
                 restaurantDto.isNoKidsZone(),
-                ChefDto.toEntity(chefDto),
-                restaurantDto.getComments() != null
-                        ? restaurantDto.getComments().stream()
-                        .map(CommentDto::toEntity)  // ✅ CommentDto → Comment 변환
-                        .collect(Collectors.toList())
-                        : new ArrayList<>()
+                chef,
+                new ArrayList<>()
 
         );
     }
-    public static Restaurant toEntity(RestaurantDto restaurantDto) {
-        return Restaurant.of(
-                restaurantDto.getRestName(),
-                restaurantDto.getRestImg(),
-                restaurantDto.getRestPhone(),
-                restaurantDto.getAddress(),
-                restaurantDto.isRestRental(),
-                restaurantDto.isGroupReservation(),
-                restaurantDto.isCorkage(),
-                restaurantDto.isNoKidsZone(),
-                restaurantDto.getChefDto() != null ? ChefDto.toEntity(restaurantDto.getChefDto()) : null,
-                restaurantDto.getComments() != null
-                        ? restaurantDto.getComments().stream()
-                        .map(CommentDto::toEntity)  // ✅ CommentDto → Comment 변환
-                        .collect(Collectors.toList())
-                        : new ArrayList<>()
-        );
-    }
+    
 
 }

@@ -19,5 +19,6 @@ public class AuditingFields {
     protected LocalDateTime createdDate;
 
     @LastModifiedDate
+    @Column(insertable = false)
     protected LocalDateTime modifiedDate;
 }
