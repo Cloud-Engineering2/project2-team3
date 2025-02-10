@@ -22,7 +22,7 @@ public class Address {
     @Column(length = 50)
     private String zipcode;
 
-    public String fullAddress() {
+    public String getAddress() {
         return String.format("%s,%s,%s", city, street, zipcode);
     }
 
