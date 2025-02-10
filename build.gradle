@@ -53,6 +53,7 @@ dependencies {
 =======
 
     //awsV2
+<<<<<<< HEAD
     implementation platform('software.amazon.awssdk:bom:2.27.21')
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2'
     implementation 'software.amazon.awssdk:s3'
@@ -63,6 +64,9 @@ dependencies {
 
     //awsV2
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+=======
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+>>>>>>> b5d55d0 (:pencil2: fix: modify aws configuration)
 }
 
 tasks.named('test') {
