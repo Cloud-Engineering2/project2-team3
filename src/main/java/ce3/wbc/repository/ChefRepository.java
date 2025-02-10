@@ -1,9 +1,8 @@
 package ce3.wbc.repository;
 
+
 import ce3.wbc.entity.Chef;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 
 
@@ -15,3 +14,4 @@ public interface ChefRepository extends JpaRepository<Chef, Integer> {
 
     Optional<Chef> findByChefName(String chefName);
 }
+
