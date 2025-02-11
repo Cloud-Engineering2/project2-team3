@@ -2,32 +2,27 @@ package ce3.wbc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
+import ce3.wbc.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
-
-
 import ce3.wbc.dto.CommentDto;
-import ce3.wbc.dto.UserDto;
 import ce3.wbc.entity.Comment;
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.entity.User;
 import ce3.wbc.repository.CommentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final RestaurantService restaurantService;
+    private final RestaurantRepository restaurantRepository;
     private final UserService userService;
-    
-    
+
     public List<CommentDto> getComments(Integer restId) {
-    	Restaurant restaurant = restaurantService.getRestaurant(restId);
+    	Restaurant restaurant = restaurantRepository.findById(restId)
+                .orElseThrow(() -> new IllegalArgumentException("존재 하지 않는 레스토랑입니다."));
     	List<Comment> comments = commentRepository.findByRestaurant(restaurant);
 				
 		List<CommentDto> commentDtos = new ArrayList<>();
@@ -35,24 +30,21 @@ public class CommentService {
 		for (Comment comment : comments) {
 			commentDtos.add(CommentDto.toCommentDto(comment)); 
 		}
-		
 		return commentDtos;
-		
     }
     
     @Transactional
     public void addComment(CommentDto commentDto) {
     	User user = userService.getUser(commentDto.getUserDto().getUId());
     	Integer restId = commentDto.getRestId();
-    	
-    	Restaurant restaurant = restaurantService.getRestaurant(restId);
+        Restaurant restaurant = restaurantRepository.findById(restId)
+                .orElseThrow(() -> new IllegalArgumentException("존재 하지 않는 레스토랑입니다."));
     	
     	Comment comment = CommentDto.toEntity(commentDto, restaurant, user);
     	commentRepository.save(comment);
     	
     }
-    
-    
+
     // 댓글 수정
     @Transactional
     public CommentDto updateComment(Integer commId, String commContent, String commStar) {
@@ -75,8 +67,4 @@ public class CommentService {
         
         commentRepository.deleteById(comment.getCommId()); 
     }
-
-	
-    
-
 }

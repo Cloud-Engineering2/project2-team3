@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
-public class CommentUpdateqReq {
+public class CommentUpdateReq {
 	@NotNull
     private String commContent; 
 
