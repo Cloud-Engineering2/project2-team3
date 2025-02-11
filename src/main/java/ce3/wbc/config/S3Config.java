@@ -1,13 +1,13 @@
 package ce3.wbc.config;
 
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
 
 @Configuration
@@ -23,13 +23,16 @@ public class S3Config {
     private String region;
 
     @Bean
-    public AmazonS3Client amazonS3Client() {
-        BasicAWSCredentials credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
+    public S3Client s3client() {
 
-        return (AmazonS3Client) AmazonS3ClientBuilder
-            .standard()
-            .withRegion(region)
-            .withCredentials(new AWSStaticCredentialsProvider(credentials))
-            .build();
+        // S3 사용 인증 객체
+        //AWSCredentials  credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
+
+        // 리전 정보 입력 -> S3 사용 객체 생성
+        return S3Client.builder()
+                .region(Region.of(region)) //AWS 리전 설정
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey))) // AWS 자격증명 설정
+                .build();
     }
 }

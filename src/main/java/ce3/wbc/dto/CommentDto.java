@@ -21,7 +21,6 @@ public class CommentDto {
     private Integer commId;
     private String commContent;
     private String commStar;
-
     private Integer restId;
     private UserDto userDto;
 
@@ -53,8 +52,6 @@ public class CommentDto {
                 user
         );
     }
-    
-
 }
 
 
