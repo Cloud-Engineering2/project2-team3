@@ -62,7 +62,7 @@ public class RestaurantDto {
         if (chef == null) {
             throw new IllegalArgumentException("레스토랑을 생성하려면 Chef가 반드시 필요합니다."); // ✅ 예외 처리
         }
-
+      
         Restaurant restaurant = toEntity(restaurantDto, chef);
 
         // CommentDto 리스트 → Comment 엔티티 리스트 변환
@@ -76,10 +76,7 @@ public class RestaurantDto {
         return restaurant;
     }
 
-
-
     public static Restaurant toEntity(RestaurantDto restaurantDto, Chef chef) {
-
         return Restaurant.of(
                 restaurantDto.getRestId(),
                 restaurantDto.getRestName(),
@@ -95,8 +92,4 @@ public class RestaurantDto {
                 new ArrayList<>()
         );
     }
-
-
-
-
 }

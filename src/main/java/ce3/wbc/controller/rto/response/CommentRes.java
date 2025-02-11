@@ -11,7 +11,6 @@ public class CommentRes {
     private Integer commId;
     private String commContent;
     private String commStar;
-    private Integer restId;
     private UserRes user;
 
     public static CommentRes toResponse(CommentDto commentDto) {
@@ -22,9 +21,7 @@ public class CommentRes {
                 .commId(commentDto.getCommId())
                 .commContent(commentDto.getCommContent())
                 .commStar(commentDto.getCommStar())
-                .restId(commentDto.getRestId())
                 .user(UserRes.toResponse(commentDto.getUserDto()))
                 .build();
     }
-
 }

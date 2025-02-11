@@ -1,6 +1,5 @@
 package ce3.wbc.service;
 
-
 import ce3.wbc.controller.rto.request.RestaurantCreate;
 import ce3.wbc.controller.rto.request.RestaurantEdit;
 import ce3.wbc.controller.rto.request.RestaurantReq;
@@ -29,7 +28,6 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final ChefRepository chefRepository;
     private final S3ImageService s3ImageService;
-
     private static final String DEFAULT_IMAGE_KEY = "default.jpg";
 
     public Page<RestaurantDto> findAllRestList(Pageable pageable) {
