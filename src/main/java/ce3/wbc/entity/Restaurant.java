@@ -50,10 +50,13 @@ public class Restaurant {
     @JoinColumn(name = "chef_id")
     private Chef chef;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     public static Restaurant of(String restName, String restImg, String restPhone, Address address, boolean restRental, boolean groupReservation, boolean corkage, boolean noKidsZone,Chef chef, List<Comment> comments) {
         return new Restaurant(null, restName, restImg, restPhone, address, restRental, groupReservation, corkage, noKidsZone, chef, new ArrayList<>());
     }
+     
+    
+    
 }
