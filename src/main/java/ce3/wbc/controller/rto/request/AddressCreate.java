@@ -1,25 +1,24 @@
 package ce3.wbc.controller.rto.request;
 
-import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class AddressReq {
-    @Nullable
+public class AddressCreate {
+    @NotBlank(message = "city 필수 입력 값입니다.")
     private String city;
 
-    @Nullable
+    @NotBlank(message = "street 필수 입력 값입니다.")
     private String street;
 
-    @Nullable
+    @NotBlank(message = "zipcode 필수 입력 값입니다.")
     private String zipcode;
 
     public String getAddress() {
         return String.format("%s,%s,%s", city, street, zipcode);
     }
-
 }
 

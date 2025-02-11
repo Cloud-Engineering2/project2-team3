@@ -31,6 +31,14 @@ public class Comment extends AuditingFields {
     @JoinColumn(name = "rest_id", nullable = true)
     private Restaurant restaurant;
 
+    //연관관계 편의 메서드
+    public void assignToRestaurant(Restaurant restaurant) {
+        if (restaurant == null) {
+            throw new IllegalArgumentException("댓글은 반드시 특정 레스토랑에 속해야 합니다.");
+        }
+        this.restaurant = restaurant;
+    }
+
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "user_id", nullable = true)
