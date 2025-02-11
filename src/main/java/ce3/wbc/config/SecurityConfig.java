@@ -7,8 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableMethodSecurity(prePostEnabled = true,securedEnabled = true)
-@EnableWebSecurity
+//@EnableMethodSecurity(prePostEnabled = true,securedEnabled = true)
+//@EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 	@Bean
