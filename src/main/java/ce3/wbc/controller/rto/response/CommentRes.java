@@ -11,7 +11,7 @@ public class CommentRes {
     private Integer commId;
     private String commContent;
     private String commStar;
-    private RestaurantRes restaurant;
+//    private RestaurantRes restaurant;
     private UserRes user;
 
     public static CommentRes toResponse(CommentDto commentDto) {
@@ -22,7 +22,7 @@ public class CommentRes {
                 .commId(commentDto.getCommId())
                 .commContent(commentDto.getCommContent())
                 .commStar(commentDto.getCommStar())
-                .restaurant(RestaurantRes.toResponse(commentDto.getRestaurantDto()))
+//                .restaurant(RestaurantRes.toResponse(commentDto.getRestaurantDto()))
                 .user(UserRes.toResponse(commentDto.getUserDto()))
                 .build();
     }
