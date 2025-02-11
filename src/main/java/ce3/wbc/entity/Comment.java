@@ -56,13 +56,5 @@ public class Comment extends AuditingFields {
     	return null;
     	
     }
-    
-    public void assignToRestaurant(Restaurant restaurant) {
-        if (restaurant == null) {
-            throw new IllegalArgumentException("댓글은 반드시 특정 레스토랑에 속해야 합니다.");
-        }
-        this.restaurant = restaurant;
-    }
-
 }
 

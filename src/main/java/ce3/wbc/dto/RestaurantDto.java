@@ -3,6 +3,7 @@ package ce3.wbc.dto;
 import ce3.wbc.entity.Chef;
 import ce3.wbc.entity.Comment;
 import ce3.wbc.entity.Restaurant;
+import ce3.wbc.entity.User;
 import ce3.wbc.entity.attribute.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -58,7 +59,7 @@ public class RestaurantDto {
                 .build();
 
     }
-    public static Restaurant toEntityWithComm(RestaurantDto restaurantDto, Chef chef, List<CommentDto> commentDtos) {
+    public static Restaurant toEntityWithComm(RestaurantDto restaurantDto, Chef chef, List<CommentDto> commentDtos, User user) {
         if (chef == null) {
             throw new IllegalArgumentException("레스토랑을 생성하려면 Chef가 반드시 필요합니다."); // ✅ 예외 처리
         }
@@ -67,7 +68,7 @@ public class RestaurantDto {
 
         // CommentDto 리스트 → Comment 엔티티 리스트 변환
         List<Comment> comments = commentDtos.stream()
-                .map(dto -> CommentDto.toEntity(dto, restaurant)) // ✅ Restaurant을 전달
+                .map(dto -> CommentDto.toEntity(dto, restaurant, user)) // ✅ Restaurant을 전달
                 .collect(Collectors.toList());
 
         // Restaurant에 Comment 추가
