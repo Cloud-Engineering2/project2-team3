@@ -9,12 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,13 +35,13 @@ public class RestaurantController {
         return "index";
     }
 
-    @GetMapping("chef")
-    public String getChefRestaurants(@RequestParam String chef,Model model,
+    @GetMapping("chef/chefId")
+    public String getChefRestaurants(@PathVariable int chefId, Model model,
                                      @PageableDefault(size = 6,
                                              sort = "restName",
                                              direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<RestaurantRes> restaurants = restaurantService.findRestList(chef, pageable).map(RestaurantRes::toResponse);
-        model.addAttribute("chef", chef);
+        Page<RestaurantRes> restaurants = restaurantService.findRestList(chefId, pageable).map(RestaurantRes::toResponse);
+        model.addAttribute("chefId", chefId);
         addPaging(restaurants, model, pageable);
         return "index";
     }
@@ -73,5 +72,10 @@ public class RestaurantController {
 
     }
 
-
+    @GetMapping("/{restId}")
+    public String getRestaurantById(@PathVariable int restId, Model model){
+        RestaurantRes restaurant = restaurantService.getRestaurantById(restId);
+        model.addAttribute("restaurant", restaurant);
+        return "detail";
+    }
 }
