@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class RestaurantService {
@@ -86,7 +86,7 @@ public class RestaurantService {
 
     }
 
-
+    @Transactional
     public RestaurantDto create(@Valid RestaurantCreate restaurantCreate, MultipartFile file) {
         String s3Key;
         String restEngName = restaurantCreate.getRestEngName();
@@ -123,7 +123,7 @@ public class RestaurantService {
         return RestaurantDto.toDto(savedRestaurant);
 
     }
-
+    @Transactional
     public RestaurantRes update(int id, RestaurantEdit restaurantEdit, MultipartFile file) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 레스토랑이 존재하지 않습니다. id: " + id));
@@ -176,10 +176,16 @@ public class RestaurantService {
     }
 
 
-
+    @Transactional
     public void delete(int id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 레스토랑이 존재하지 않습니다. id: " + id));
         restaurantRepository.delete(restaurant);
+    }
+
+    public RestaurantRes getRestaurantById(int restId) {
+        Restaurant restaurant = restaurantRepository.findById(restId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+        return RestaurantRes.toResponse(RestaurantDto.toDto(restaurant));
     }
 }

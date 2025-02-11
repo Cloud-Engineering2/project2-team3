@@ -14,11 +14,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/restaurants/api")
+@RequestMapping("/api/restaurants")
 @RequiredArgsConstructor
 public class RestaurantApiController {
     private final RestaurantService restaurantService;
@@ -44,7 +45,10 @@ public class RestaurantApiController {
         return restaurantService.findFilterRestList(req,pageable).map(RestaurantRes::toResponse);
     }
 
-
+    @GetMapping("/{restId}")
+    public ResponseEntity<RestaurantRes> getRestaurantById(@PathVariable int restId){
+        return new ResponseEntity<>(restaurantService.getRestaurantById(restId), HttpStatus.OK);
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
