@@ -64,7 +64,6 @@ public class CommentService {
     											.orElseThrow(() -> new EntityNotFoundException("Comment not found with id: " + commId));;
         // 수정
         comment.update(commId, commContent, commStar);
-//        commentRepository.save(comment);
         
         // Restaurant
         Restaurant restaurant = comment.getRestaurant();
@@ -75,17 +74,10 @@ public class CommentService {
 
     // 댓글 삭제	
     @Transactional
-    public Boolean deleteComment(Integer commId) {
-        // 댓글이 존재하는지 확인
+    public void deleteComment(Integer commId) {
         Comment comment = commentRepository.findById(commId).orElseThrow(() -> new EntityNotFoundException("Comment not found with id: " + commId));
         
-        commentRepository.deleteById(comment.getCommId()); // 댓글 삭제
-        
-        if (!commentRepository.existsById(commId)) { // 삭제 완료
-            return true;
-        } else {
-            return false;
-        }
+        commentRepository.deleteById(comment.getCommId()); 
     }
 
 	

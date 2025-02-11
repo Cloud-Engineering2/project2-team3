@@ -1,7 +1,5 @@
 package ce3.wbc.service;
 
-
-import ce3.wbc.dto.RestaurantDto;
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.repository.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,7 +14,6 @@ public class RestaurantService {
 	public Restaurant getRestaurant(Integer restId) {
 		Restaurant restaurant = restaurantRepository.findById(restId)
 														.orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + restId));
-//		RestaurantDto restaurantDto = RestaurantDto.toDto(restaurant);
 		return restaurant;
 	}
 }

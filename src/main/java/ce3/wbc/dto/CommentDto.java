@@ -50,7 +50,7 @@ public class CommentDto {
                 commentDto.getCommContent(),
                 commentDto.getCommStar(),
                 restaurant,
-                user // 주소값
+                user
         );
     }
     
