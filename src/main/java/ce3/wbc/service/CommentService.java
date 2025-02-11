@@ -30,10 +30,6 @@ public class CommentService {
     	Restaurant restaurant = restaurantService.getRestaurant(restId);
     	List<Comment> comments = commentRepository.findByRestaurant(restaurant);
 				
-		for (Comment comment : comments) {
-            System.out.println(comment.getCommContent());
-        }
-		
 		List<CommentDto> commentDtos = new ArrayList<>();
 		
 		for (Comment comment : comments) {
