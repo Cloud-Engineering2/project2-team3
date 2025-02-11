@@ -72,16 +72,13 @@ public class CommentController {
 	    Integer uId = commentReq.getUId();
 	    
 	    User user = userService.getUser(uId);
-	    System.out.println(user.getUserName()); 
 	    UserDto userDto = UserDto.toDto(user);
-	    System.out.println(userDto.getUserName()); 
 
 	    // 식당
         Integer restId = commentReq.getRestId();
         
         // 댓글 생성
         CommentDto commentDto = CommentDto.of(content, star, restId, userDto);
-        System.out.println(commentDto.getUserDto().getUId());
         
     	// DB에 저장
     	commentService.addComment(commentDto);
