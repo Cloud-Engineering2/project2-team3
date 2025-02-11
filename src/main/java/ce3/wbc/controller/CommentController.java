@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import ce3.wbc.controller.rto.request.CommentReq;
+import ce3.wbc.controller.rto.request.CommentUpdateReq;
+import ce3.wbc.controller.rto.request.CommentListReq;
 import ce3.wbc.controller.rto.response.CommentRes;
 import ce3.wbc.dto.CommentDto;
 import ce3.wbc.dto.UserDto;
@@ -40,28 +42,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Builder
-class CommentListReq {
-    @NotNull
-    @JsonProperty("restId")
-    private Integer restId;
-}
-
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Builder
-class CommentUpdateReq {
-	@NotNull
-    private String commContent; 
-
-    @NotNull
-    private String commStar;
-}
-
 @Controller
 @RequestMapping("replies")
 @RequiredArgsConstructor
@@ -75,7 +55,7 @@ public class CommentController {
 
     
     /************************************************** 댓글 등록 **************************************************/
-    @PostMapping // localhost:8080/replies
+    @PostMapping 
     public ResponseEntity<Void> registerComment(@RequestBody @Valid CommentReq commentReq, BindingResult bindingResult) {
 
 		// 요청 유효성 검사
@@ -88,24 +68,24 @@ public class CommentController {
 	    String star = commentReq.getCommStar();
         
 
-        	// 작성자 401에러?? : HttpStatus.UNAUTHORIZED
-    	    Integer uId = commentReq.getUId();
-    	    
-    	    User user = userService.getUser(uId);
-    	    System.out.println(user.getUserName()); // ce3.wbc.entity.User@6eef4a21
-    	    UserDto userDto = UserDto.toDto(user);
-    	    System.out.println(userDto.getUserName()); //ce3.wbc.dto.UserDto@26d3f8dd
+    	// 작성자 401에러?? : HttpStatus.UNAUTHORIZED
+	    Integer uId = commentReq.getUId();
+	    
+	    User user = userService.getUser(uId);
+	    System.out.println(user.getUserName()); 
+	    UserDto userDto = UserDto.toDto(user);
+	    System.out.println(userDto.getUserName()); 
 
-    	    // 식당
-            Integer restId = commentReq.getRestId();
-            
-            // 댓글 생성
-            CommentDto commentDto = CommentDto.of(content, star, restId, userDto);
-            System.out.println(commentDto.getUserDto().getUId());
-            
-        	// DB에 저장
-        	commentService.addComment(commentDto);
-        	return ResponseEntity.ok().build(); // 200
+	    // 식당
+        Integer restId = commentReq.getRestId();
+        
+        // 댓글 생성
+        CommentDto commentDto = CommentDto.of(content, star, restId, userDto);
+        System.out.println(commentDto.getUserDto().getUId());
+        
+    	// DB에 저장
+    	commentService.addComment(commentDto);
+    	return ResponseEntity.ok().build(); // 200
 
         
     }
@@ -113,15 +93,8 @@ public class CommentController {
     
     
     /******************************************* 댓글 조회: restaurant id *******************************************/
-    @GetMapping // localhost:8080/replies?restaurant=3
+    @GetMapping 
     public ResponseEntity<List<CommentRes>> getComments(@RequestParam("restaurant") Integer restId) {        
-        
-        /* 로그
-        for (CommentDto comment : comments) {
-            System.out.println(comment.getCommContent());
-        }
-        */       
-        
         
         List<CommentDto> comments = commentService.getComments(restId);
         
@@ -138,7 +111,7 @@ public class CommentController {
     
     
     /********************************************* 댓글 수정: comment id *********************************************/
-    @PutMapping("/{commId}") // localhost:8080/replies/52
+    @PutMapping("/{commId}") 
     public ResponseEntity<CommentRes> updateComment(@PathVariable("commId") Integer commId,
                                                                @RequestBody @Valid CommentUpdateReq commentUpdateReq, BindingResult bindingResult) {
     	// 요청 유효성 검사
@@ -156,10 +129,10 @@ public class CommentController {
     
     
     /********************************************* 댓글 삭제: comment id *********************************************/
-    @DeleteMapping("/{commId}") // localhost:8080/replies/39
+    @DeleteMapping("/{commId}")
     public ResponseEntity<Void> deleteComment(@PathVariable("commId") Integer commId) {
 
-            Boolean isDeleted = commentService.deleteComment(commId);
+            commentService.deleteComment(commId);
             return ResponseEntity.noContent().build();
             
     }
