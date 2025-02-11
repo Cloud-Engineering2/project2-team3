@@ -141,39 +141,8 @@
       const toggleAllBtn = document.getElementById('toggleAllBtn');
 
       document.addEventListener("DOMContentLoaded", () => {
-          // 토글 버튼 이벤트 리스너 설정
           setupToggleButtons();
-
-          fetch('/chefs')
-              .then(response => response.json())
-              .then(data => {
-                  const chefGrid = document.getElementById('chefGrid');
-                  chefGrid.innerHTML = ''; // 기존 내용 초기화
-
-                  data.forEach(chef => {
-                      const card = document.createElement('div');
-                      card.classList.add('chef-card', chef.chefCategory);
-                      card.setAttribute('data-chef-id', chef.chefId);
-
-                      const img = document.createElement('img');
-                      img.src = chef.chefImage;
-                      img.alt = chef.chefName;
-                      img.classList.add('chef-image');
-
-                      const name = document.createElement('div');
-                      name.classList.add('chef-name');
-                      name.textContent = chef.chefName;
-
-                      card.appendChild(img);
-                      card.appendChild(name);
-                      chefGrid.appendChild(card);
-
-                      card.addEventListener('click', () => {
-                          showRestaurants(chef.chefId, chef.chefName);
-                      });
-                  });
-              })
-              .catch(error => console.error('요리사 정보를 불러오는 중 오류 발생:', error));
+          setupChefCardListeners();
       });
 
       function setupToggleButtons() {
@@ -181,6 +150,17 @@
           toggleWhiteBtn.addEventListener('click', () => filterChefs('W'));
           toggleAllBtn.addEventListener('click', () => filterChefs('all'));
       }
+
+        function setupChefCardListeners() {
+            const chefCards = document.querySelectorAll('.chef-card');
+            chefCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const chefId = card.getAttribute('data-chef-id');
+                    const chefName = card.querySelector('.chef-name').textContent;
+                    showRestaurants(chefId, chefName);
+                });
+            });
+        }
 
       function filterChefs(category) {
           const cards = document.querySelectorAll('.chef-card');
@@ -193,14 +173,16 @@
           });
       }
 
-      // 레스토랑 정보 표시 함수
       function showRestaurants(chefId, chefName) {
           modalChefName.textContent = `${chefName}의 식당`;
           restaurantList.innerHTML = '';
 
-          fetch(`/restaurants/${chefId}`)
+          fetch(`/api/restaurants/chef/${chefId}`)
               .then(response => response.json())
-              .then(restaurants => {
+              .then(data => {
+                  const restaurants = data.content;  // 'content' 속성에 레스토랑 데이터가 들어있음
+                  console.log(restaurants); // 배열 확인
+
                   if (restaurants.length === 0) {
                       const li = document.createElement('li');
                       li.textContent = '등록된 식당이 없습니다.';
@@ -208,29 +190,33 @@
                   } else {
                       restaurants.forEach(restaurant => {
                           const li = document.createElement('li');
-                          li.textContent = restaurant.name;
-                          restaurantList.appendChild(li);
+
+                          // <a> 태그로 레스토랑 이름을 링크로 만들어줌
+                          const link = document.createElement('a');
+                          link.href = `/restaurants/${restaurant.restId}`;  // 링크 경로
+                          link.textContent = restaurant.restName;  // 레스토랑 이름
+
+                          li.appendChild(link);  // <li> 안에 <a> 태그 추가
+                          restaurantList.appendChild(li);  // <ul> 또는 <ol>에 <li> 추가
                       });
                   }
+                  modal.style.display = 'block';
               })
               .catch(error => {
                   console.error('레스토랑 정보를 불러오는 중 오류 발생:', error);
                   const li = document.createElement('li');
-                  li.textContent = '식당 정보를 불러오는데 실패했습니다.';
+                  li.textContent = '등록된 식당이 없습니다.';
                   restaurantList.appendChild(li);
+                  modal.style.display = 'block';
               });
-
-          modal.style.display = 'block';
       }
 
-      // 모달 닫기 이벤트
       if (closeBtn) {
           closeBtn.addEventListener('click', () => {
               modal.style.display = 'none';
           });
       }
 
-      // 모달 외부 클릭 시 닫기
       window.addEventListener('click', (event) => {
           if (event.target === modal) {
               modal.style.display = 'none';
