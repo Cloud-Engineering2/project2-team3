@@ -1,7 +1,5 @@
 package ce3.wbc.controller.rto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -24,9 +22,5 @@ public class CommentReq {
     private String commStar;
     @NotNull
     private Integer restId;
-    @NotNull
-    @JsonProperty("uId")
-    private Integer uId;
-
 }
 

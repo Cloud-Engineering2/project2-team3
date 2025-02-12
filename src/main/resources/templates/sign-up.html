@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
   <head>
+    <link rel="icon" href="/wbc_logo.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WBC</title>
@@ -85,7 +86,7 @@
         <input type="text" id="userId" th:field="*{userId}" required minlength="4">
 
         <label for="userPassword">비밀번호</label>
-        <input type="password" id="userPassword" th:field="*{userPassword}" required minlength="6">
+        <input type="password" id="userPassword" th:field="*{userPassword}" required minlength="4">
 
         <label for="userName">이름</label>
         <input type="text" id="userName" th:field="*{userName}" required minlength="2">
