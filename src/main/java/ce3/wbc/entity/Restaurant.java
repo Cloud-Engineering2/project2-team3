@@ -4,8 +4,11 @@ import ce3.wbc.entity.attribute.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -61,7 +64,7 @@ public class Restaurant {
             throw new IllegalArgumentException("댓글이 null일 수 없습니다.");
         }
         this.comments.add(comment);
-        comment.assignToRestaurant(this); // ✅ `Comment`의 필드도 설정
+        comment.assignToRestaurant(this); // `Comment`의 필드도 설정
     }
 
 
@@ -71,5 +74,21 @@ public class Restaurant {
     }
     public static Restaurant of(Integer restId, String restName, String restImg,String originalImgName, String restPhone, Address address, boolean restRental, boolean groupReservation, boolean corkage, boolean noKidsZone,Chef chef, List<Comment> comments) {
         return new Restaurant(restId, restName, restImg,originalImgName,restPhone, address, restRental, groupReservation, corkage, noKidsZone, chef, comments);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Restaurant that = (Restaurant) o;
+        return getRestId() != null && Objects.equals(getRestId(), that.getRestId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }
