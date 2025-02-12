@@ -18,10 +18,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
-@Transactional
+
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class RestaurantService {
@@ -35,14 +34,8 @@ public class RestaurantService {
         return restaurants.map(RestaurantDto::toDto);
     }
 
-    public Page<RestaurantDto> findRestList(String chef, Pageable pageable) {
-        if (!chefRepository.existsByChefName(chef)) {
-            throw new NoSuchElementException(String.format("%s를 찾을 수 없습니다", chef));
-        }
-        Page<Restaurant> restaurants = restaurantRepository.findRestaurantByChef_ChefName(chef, pageable);
-        if (restaurants.isEmpty()) {
-            throw new NoSuchElementException(String.format("%s 의 레스토랑을 찾을 수 없습니다", chef));
-        }
+    public Page<RestaurantDto> findRestList(int chef, Pageable pageable) {
+        Page<Restaurant> restaurants = restaurantRepository.findRestaurantByChefId(chef, pageable);
         return restaurants.map(RestaurantDto::toDto);
     }
 

@@ -32,14 +32,12 @@ public class UserController {
     // 회원가입 처리
     @PostMapping("/sign-up")
     public String SignUp (@Valid @ModelAttribute SignupForm form, BindingResult bindingResult) {
-        log.info("폼 입력 값: userId={}, userPassword={}, userName={}", form.getUserId(), form.getUserPassword(), form.getUserName());
         try {
             if (bindingResult.hasErrors()) {
                 log.warn("회원가입 유효성 검사 실패: {}", bindingResult.getAllErrors());
                 return "sign-up";
             }
             userService.createUser(SignupForm.toDto(form));
-            log.info("회원가입 성공: {}", form.getUserId());
         } catch (Exception e) {
             log.error("회원가입 중 예외 발생: ", e);
             return "error/500";

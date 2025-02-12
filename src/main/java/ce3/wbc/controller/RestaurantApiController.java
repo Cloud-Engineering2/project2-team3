@@ -32,10 +32,11 @@ public class RestaurantApiController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/chef")
-    public Page<RestaurantRes> getChefRestaurants(@RequestParam String chef,
+    @GetMapping("/chef/{chefId}")
+    public Page<RestaurantRes> getChefRestaurants(@PathVariable int chefId,
                                                   @PageableDefault(size = 6, sort = "restName", direction = Sort.Direction.ASC) Pageable pageable) {
-        return restaurantService.findRestList(chef,pageable).map(RestaurantRes::toResponse);
+        System.out.println("셰프id = "+ chefId);
+        return restaurantService.findRestList(chefId,pageable).map(RestaurantRes::toResponse);
     }
 
     @ResponseStatus(HttpStatus.OK)
