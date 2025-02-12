@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Error 400</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <!--<noscript><link rel="stylesheet" th:href="@{/css/header.css}" /></noscript>-->
+</head>
+<body>
+    <div class="error-page">
+        <h3>
+            400 : Bad Request
+        </h3>
+        <h5>
+            잘못된 요청입니다.
+            <a th:href="@{/chefs}" class="button">버튼을 누르시면 메인페이지로 이동합니다</a>
+        </h5>
+    </div>
+
+</body>

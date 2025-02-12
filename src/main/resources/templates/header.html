@@ -1,0 +1,26 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--  <head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  </head>-->
+<!--  <body>-->
+    <header th:fragment="header" class="header">
+      <div class="header-content">
+        <a href="/" class="logo">흑백 요리사 리뷰</a>
+        <nav class="nav-links">
+          <div sec:authorize="isAuthenticated()">
+            <span th:text="${#authentication.name}">사용자명</span>
+            <form th:action="@{users/logout}" method="post" style="display: inline;">
+              <button type="submit" class="logout-btn">로그아웃</button>
+            </form>
+          </div>
+          <div sec:authorize="!isAuthenticated()">
+            <a href="/login" class="login-btn">로그인</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+<!--  </body>-->
+<!--</html>-->
