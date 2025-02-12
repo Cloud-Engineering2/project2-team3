@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,7 +31,7 @@ public class Comment extends AuditingFields {
 
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rest_id", nullable = true)
+    @JoinColumn(name = "rest_id", nullable = true) //?
     private Restaurant restaurant;
 
     //연관관계 편의 메서드
@@ -41,7 +44,7 @@ public class Comment extends AuditingFields {
 
     //연관 관계
     @ManyToOne(fetch = FetchType.LAZY) 
-    @JoinColumn(name = "user_id", nullable = true)
+    @JoinColumn(name = "user_id", nullable = true) // ?
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User user;
 
@@ -55,6 +58,22 @@ public class Comment extends AuditingFields {
 		this.commStar = commStar;
     	return null;
     	
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Comment comment = (Comment) o;
+        return getCommId() != null && Objects.equals(getCommId(), comment.getCommId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }
 
