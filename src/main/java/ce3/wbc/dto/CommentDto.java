@@ -1,6 +1,7 @@
 package ce3.wbc.dto;
 
 
+import ce3.wbc.controller.rto.request.CommentReq;
 import ce3.wbc.entity.Comment;
 import ce3.wbc.entity.Restaurant;
 import ce3.wbc.entity.User;
@@ -48,6 +49,15 @@ public class CommentDto {
         return Comment.of(
                 commentDto.getCommContent(),
                 commentDto.getCommStar(),
+                restaurant,
+                user
+        );
+    }
+
+    public static Comment toEntity(CommentReq commentReq, Restaurant restaurant, User user) {
+        return Comment.of(
+                commentReq.getCommContent(),
+                commentReq.getCommStar(),
                 restaurant,
                 user
         );
