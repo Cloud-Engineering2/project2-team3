@@ -16,7 +16,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
 
 
-    //페이지 요청시 진행
-    //Page<Restaurant> findRestaurantByChef_ChefName(String chefChefName, Pageable pageable);
 
 }

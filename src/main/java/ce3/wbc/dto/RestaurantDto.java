@@ -33,7 +33,7 @@ public class RestaurantDto {
     private  boolean noKidsZone;
     @JsonIgnore
     private ChefDto chefDto;
-    @JsonIgnore
+    @Builder.Default @JsonIgnore
     private List<CommentDto> comments = new ArrayList<>();
 
     public static RestaurantDto toDto(Restaurant restaurant) {
