@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
+    <link rel="icon" href="/wbc_logo.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WBC</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <style>
       body {
           font-family: 'Nanum Gothic', sans-serif;
@@ -21,7 +23,7 @@
           box-shadow: 0 0 10px rgba(0,0,0,0.1);
           overflow: hidden;
       }
-      .header {
+      .restInfo {
           display: flex;
           padding: 20px;
       }
@@ -104,12 +106,33 @@
       .comment-form button:hover {
           background-color: #555;
       }
+      .comment-actions {
+          margin-top: 10px;
+      }
+      .comment-actions button {
+          padding: 5px 10px;
+          margin-right: 5px;
+          background-color: #f0f0f0;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+      .comment-actions button:hover {
+          background-color: #e0e0e0;
+      }
+      .edit-mode textarea {
+          width: 100%;
+          margin-bottom: 10px;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
     </style>
   </head>
   <body>
-<!--  <th:block th:replace="~{header :: header}"></th:block>-->
+  <th:block th:replace="~{header :: header}"></th:block>
     <div class="container">
-      <div class="header">
+      <div class="restInfo">
         <div class="photo-gallery">
           <img th:src="${restaurant.restImg}" alt="Restaurant Image" class="main-photo" id="mainPhoto">
         </div>
@@ -147,24 +170,138 @@
       </div>
       <div class="comments-section">
         <div class="comment-form">
-          <form id="commentForm" th:action="@{/replies}" method="post">
+          <form id="commentForm">
             <input type="text" name="commContent" placeholder="댓글" required>
-            <input type="text" name="commStar" placeholder="별점 (1~5)" required>
-            <input type="hidden" name="restId" th:value="value=${restaurant.restId}">
+            <input type="number" name="commStar" placeholder="별점" min="1" max="5" required>
             <button type="submit">작성</button>
           </form>
         </div>
         <div id="commentList">
-          <div th:each="comment : ${restaurant.comments}" class="comment">
+          <div th:each="comment : ${restaurant.comments}" class="comment" th:data-comment-id="${comment.commId}">
             <div class="comment-header">
               <span class="comment-author" th:text="${comment.user.userName}">작성자</span>
-<!--              <span class="comment-date" th:text="${#temporals.format(comment.date, 'yyyy-MM-dd HH:mm')}">날짜</span>-->
             </div>
-            <p th:text="${comment.commContent}">댓글 내용</p>
+            <p class="comment-content" th:text="${comment.commContent}">댓글 내용</p>
+            <p class="comment-star" th:text="'별점: ' + ${comment.commStar}">별점: 5</p>
+            <div class="comment-actions"
+                 th:if="${#authentication.principal.userId == comment.user.userId}">
+              <button onclick="editComment(this)" class="edit-btn">수정</button>
+              <button onclick="deleteComment(this)" class="delete-btn">삭제</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <script th:inline="javascript">
+      const restId = [[${restaurant.restId}]];
+      const currentUserId = [[${#authentication.principal.userId}]];
+
+      document.getElementById('commentForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const formData = {
+              commContent: this.querySelector('[name="commContent"]').value,
+              commStar: this.querySelector('[name="commStar"]').value,
+              restId: restId
+          };
+
+          fetch('/replies', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+          })
+          .then(response => {
+              if (response.ok) {
+                  location.reload();
+              } else {
+                  alert('댓글 작성에 실패했습니다.');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('오류가 발생했습니다.');
+          });
+      });
+
+      function editComment(btn) {
+          const commentDiv = btn.closest('.comment');
+          const commentId = commentDiv.dataset.commentId;
+          const contentP = commentDiv.querySelector('.comment-content');
+          const starP = commentDiv.querySelector('.comment-star');
+          const currentContent = contentP.textContent;
+          const currentStar = starP.textContent.split(': ')[1];
+
+          commentDiv.innerHTML = `
+              <div class="edit-mode">
+                  <textarea>${currentContent}</textarea>
+                  <input type="number" value="${currentStar}" min="1" max="5">
+                  <button onclick="saveEdit(this, '${commentId}')">저장</button>
+                  <button onclick="cancelEdit(this)">취소</button>
+              </div>
+          `;
+      }
+
+      function saveEdit(btn, commentId) {
+          const editDiv = btn.closest('.edit-mode');
+          const newContent = editDiv.querySelector('textarea').value;
+          const newStar = editDiv.querySelector('input[type="number"]').value;
+
+          const formData = {
+              commContent: newContent,
+              commStar: newStar
+          };
+
+          fetch(`/replies/${commentId}`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+          })
+          .then(response => {
+              if (response.ok) {
+                  location.reload();
+              } else {
+                  alert('댓글 수정에 실패했습니다.');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('오류가 발생했습니다.');
+          });
+      }
+
+      function cancelEdit(btn) {
+          location.reload();
+      }
+
+      function deleteComment(btn) {
+          if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+              return;
+          }
+
+          const commentDiv = btn.closest('.comment');
+          const commentId = commentDiv.dataset.commentId;
+
+          fetch(`/replies/${commentId}`, {
+              method: 'DELETE'
+          })
+          .then(response => {
+              if (response.ok) {
+                  location.reload();
+              } else {
+                  alert('댓글 삭제에 실패했습니다.');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('오류가 발생했습니다.');
+          });
+      }
+    </script>
   </body>
 </html>
 
