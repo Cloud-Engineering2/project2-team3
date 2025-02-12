@@ -3,18 +3,14 @@ package ce3.wbc.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ce3.wbc.security.WbcUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -56,12 +52,13 @@ public class CommentController {
     
     /************************************************** 댓글 등록 **************************************************/
     @PostMapping 
-    public ResponseEntity<Void> registerComment(@RequestBody @Valid CommentReq commentReq, BindingResult bindingResult) {
-
+    public String registerComment(@RequestBody @Valid CommentReq commentReq,
+                                                BindingResult bindingResult,
+                                                @AuthenticationPrincipal WbcUserDetails wbcUser) {
 		// 요청 유효성 검사
-		if (bindingResult.hasErrors()) { 
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400                                 
-		}
+//		if (bindingResult.hasErrors()) {
+//	        return "400"; // 400
+//		}
 		
 		// 댓글과 별점
 	    String content = commentReq.getCommContent();
@@ -69,10 +66,8 @@ public class CommentController {
         
 
     	// 작성자 401에러?? : HttpStatus.UNAUTHORIZED
-	    Integer uId = commentReq.getUId();
-	    
-	    User user = userService.getUser(uId);
-	    UserDto userDto = UserDto.toDto(user);
+//	    User user = userService.getUser(uId);
+	    UserDto userDto = UserDto.toDto(wbcUser.getUser());
 
 	    // 식당
         Integer restId = commentReq.getRestId();
@@ -81,10 +76,9 @@ public class CommentController {
         CommentDto commentDto = CommentDto.of(content, star, restId, userDto);
         
     	// DB에 저장
-    	commentService.addComment(commentDto);
-    	return ResponseEntity.ok().build(); // 200
-
-        
+        System.out.println("restID: "+ restId);
+    	commentService.addComment(commentReq, userDto);
+        return "redirect:/restaurants/"+restId;
     }
     
     

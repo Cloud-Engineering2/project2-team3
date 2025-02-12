@@ -24,9 +24,5 @@ public class CommentReq {
     private String commStar;
     @NotNull
     private Integer restId;
-    @NotNull
-    @JsonProperty("uId")
-    private Integer uId;
-
 }
 

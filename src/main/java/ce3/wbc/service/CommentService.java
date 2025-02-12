@@ -2,6 +2,9 @@ package ce3.wbc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ce3.wbc.controller.rto.request.CommentReq;
+import ce3.wbc.dto.UserDto;
 import ce3.wbc.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 import ce3.wbc.dto.CommentDto;
@@ -34,13 +37,13 @@ public class CommentService {
     }
     
     @Transactional
-    public void addComment(CommentDto commentDto) {
-    	User user = userService.getUser(commentDto.getUserDto().getUId());
-    	Integer restId = commentDto.getRestId();
+    public void addComment(CommentReq commentReq, UserDto userDto) {
+    	User user = userService.getUser(userDto.getUId());
+    	Integer restId = commentReq.getRestId();
         Restaurant restaurant = restaurantRepository.findById(restId)
                 .orElseThrow(() -> new IllegalArgumentException("존재 하지 않는 레스토랑입니다."));
     	
-    	Comment comment = CommentDto.toEntity(commentDto, restaurant, user);
+    	Comment comment = CommentDto.toEntity(commentReq, restaurant, user);
     	commentRepository.save(comment);
     	
     }

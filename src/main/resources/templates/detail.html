@@ -148,7 +148,9 @@
       <div class="comments-section">
         <div class="comment-form">
           <form id="commentForm" th:action="@{/replies}" method="post">
-            <input type="text" name="content" placeholder="댓글" required>
+            <input type="text" name="commContent" placeholder="댓글" required>
+            <input type="text" name="commStar" placeholder="별점 (1~5)" required>
+            <input type="hidden" name="restId" th:value="value=${restaurant.restId}">
             <button type="submit">작성</button>
           </form>
         </div>
