@@ -35,6 +35,8 @@ public class SecurityConfig {
         //인가
         security.authorizeHttpRequests((authorize ->
                 authorize
+                        .requestMatchers(HttpMethod.GET,"/restaurants/{restId}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/restaurants/{restId}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/sign-up").permitAll()
                         .requestMatchers(HttpMethod.POST, "/replies/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/replies/**").authenticated()
