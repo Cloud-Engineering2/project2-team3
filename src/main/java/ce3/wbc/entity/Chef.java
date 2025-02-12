@@ -28,8 +28,13 @@ public class Chef {
     @Column(name = "chef_image")
     private String chefImage;
 
-    public static Chef of(String chefName, String chefCategory, String chefImage) {
-        return new Chef(null,chefName, chefCategory, chefImage);
+    @Column(name = "original_img_name")
+    private String originalImgName;
+
+
+
+    public static Chef of(String chefName, String chefCategory, String chefImage, String originalImgName) {
+        return new Chef(null,chefName, chefCategory, chefImage, originalImgName);
     }
 
 
