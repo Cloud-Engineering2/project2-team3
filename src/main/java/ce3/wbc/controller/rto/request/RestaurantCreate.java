@@ -2,6 +2,7 @@ package ce3.wbc.controller.rto.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 /**
@@ -13,9 +14,11 @@ import lombok.*;
 @Getter
 @Builder
 public class RestaurantCreate {
-    @NotBlank(message = "chefName은 필수 입력 값입니다.")
+    @NotBlank(message = "Restaurant Name은 필수 입력 값입니다.")
     private String restName;
+    @Pattern(regexp = "^[a-zA-Z0-]*$", message = "영어와 숫자만 입력 가능합니다.")
     private String restEngName;
+    @Pattern(regexp = "^[a-zA-Z0-]*$", message = "영어와 숫자만 입력 가능합니다.")
     private String originalImgName;
     @Valid
     private AddressCreate address;
@@ -28,6 +31,6 @@ public class RestaurantCreate {
     private boolean corkage;
     private boolean noKidsZone;
 
-    @NotBlank(message = "chefName은 필수 입력 값입니다.")
+    @NotBlank(message = "chef Name은 필수 입력 값입니다.")
     private String chefName;
 }
