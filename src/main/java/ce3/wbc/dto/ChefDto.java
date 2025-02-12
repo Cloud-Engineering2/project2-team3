@@ -16,16 +16,19 @@ public class ChefDto  {
     private String chefName;
     private String chefCategory;
     private String chefImage;
+    private String originalImgName;
+
 
     public static ChefDto toDto(Chef chef) {
         if (chef == null) {
-            return new ChefDto(-1, "없어용", "W/B", "default.jpg");
+            return new ChefDto(-1, "없어용", "W/B", "default.jpg", "default.jpg");
         }
         return ChefDto.builder()
                 .chefId(chef.getChefId())
                 .chefName(chef.getChefName())
                 .chefCategory(chef.getChefCategory())
                 .chefImage(chef.getChefImage())
+                .originalImgName(chef.)
                 .build();
     }
 
@@ -33,7 +36,8 @@ public class ChefDto  {
         return Chef.of(
                 chefDto.getChefName(),
                 chefDto.getChefCategory(),
-                chefDto.getChefImage()
+                chefDto.getChefImage(),
+                chefDto.getOriginalImgName()
         );
     }
 }
