@@ -36,4 +36,12 @@ public class UserDto  {
                 userDto.getUserId()
         );
     }
+
+    public User toEntity() {
+        return User.of(
+                userName,
+                userPassword,
+                userId
+        );
+    }
 }

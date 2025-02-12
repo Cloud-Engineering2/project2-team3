@@ -1,4 +1,4 @@
-## db
+git ## db
 
 - 로컬에 db 계정 먼저 해주세용
   - user: wbc
