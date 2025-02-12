@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> -->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
+    <link rel="icon" href="/wbc_logo.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WBC</title>
@@ -16,6 +17,7 @@
       .container {
           max-width: 1200px;
           margin: 0 auto;
+          margin-top: 60px;
       }
       h1 {
           text-align: center;
@@ -103,10 +105,9 @@
     </style>
   </head>
     <body>
-    <!--    <th:block th:replace="~{header :: header}"></th:block>-->
+    <th:block th:replace="~{header :: header}"></th:block>
 
     <div class="container">
-      <h1>흑백 요리사</h1>
       <div class="toggle-container">
         <button id="toggleBlackBtn" class="toggle-btn">흑수저 요리사</button>
         <button id="toggleWhiteBtn" class="toggle-btn">백수저 요리사</button>
