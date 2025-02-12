@@ -28,13 +28,14 @@ public class UserService {
 		return user;
 	}
 
-	public User createUser(UserDto userDto) {
+	public UserDto createUser(UserDto userDto) {
 		User user = User.of(
 				userDto.getUserId(),
 				passwordEncoder.encode(userDto.getUserPassword()),
 				userDto.getUserName()
 		);
-		return userRepository.save(user);
+		userRepository.save(user);
+		return UserDto.toDto(user);
 	}
 
 

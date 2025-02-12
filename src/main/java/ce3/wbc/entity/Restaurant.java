@@ -24,10 +24,10 @@ public class Restaurant {
     private String restName;
 
     @Column(name = "rest_img")
-    private String restImg;
+    private String restImg;//s3Key==EngName == chefImage
 
-    @Column(name = "originalImgName")
-    private String originalImgName;
+    @Column(name = "original_img_name")
+    private String originalImgName;//사용자정의
 
     @Column(name = "rest_phone")
     private String restPhone;
