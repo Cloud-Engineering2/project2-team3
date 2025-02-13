@@ -32,6 +32,11 @@ public class WbcUserDetails implements UserDetails {
         return user.getUserId();
     }
 
+    //id인증
+    public String getUserId() {
+        return user.getUserId();
+    }
+
     @Override  // 계정 잠금
     public boolean isAccountNonLocked() {
         return true;
@@ -52,6 +57,3 @@ public class WbcUserDetails implements UserDetails {
         return true;
     }
 }
-
-
-

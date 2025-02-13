@@ -213,7 +213,7 @@
             <p class="comment-content" th:text="${comment.commContent}">댓글 내용</p>
             <p class="comment-star" th:text="'별점: ' + ${comment.commStar}">별점: 5</p>
             <div class="comment-actions"
-                 th:if="${#authorization.expression('isAuthenticated()') and #authentication.principal.username == comment.user.userId}">
+                 th:if="${#authorization.expression('isAuthenticated()') and #authentication.principal.userId == comment.user.userId}">
               <button onclick="editComment(this)" class="edit-btn">수정</button>
               <button onclick="deleteComment(this)" class="delete-btn">삭제</button>
             </div>
@@ -223,7 +223,7 @@
     </div>
     <script th:inline="javascript">
       const restId = [[${restaurant.restId}]];
-      const currentUserId = [[${#authentication.principal.username}]];
+      const currentUserId = [[${#authentication.principal.userId}]];
 
       document.getElementById('commentForm').addEventListener('submit', function(e) {
           e.preventDefault();
