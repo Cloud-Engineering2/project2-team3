@@ -10,7 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,6 +51,7 @@ public class SecurityConfig {
         security.formLogin(form -> form
                 .loginPage("/users/login")
                 .loginProcessingUrl("/users/login") //프론트엔드에서 action="/users/login"으로 설정할것
+                .usernameParameter("userId")
                 .successHandler(wbcAuthenticationSuccessHandler) // 로그인 처리
                 .failureUrl("/login?error=true")
                 .failureHandler(wbcAuthenticationFailureHandler)
@@ -84,11 +85,11 @@ public class SecurityConfig {
 
     //비밀번호 암호화 규칙
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(HttpSecurity security) throws Exception {
+        return security.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(authenticationProvider())
+                .build();
     }
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
