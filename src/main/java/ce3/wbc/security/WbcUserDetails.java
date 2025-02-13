@@ -29,11 +29,6 @@ public class WbcUserDetails implements UserDetails {
 
     @Override //Name인증
     public String getUsername() {
-        return user.getUserName();
-    }
-
-    //id인증
-    public String getUserId() {
         return user.getUserId();
     }
 

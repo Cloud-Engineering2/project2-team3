@@ -30,9 +30,9 @@ public class UserService {
 
 	public UserDto createUser(UserDto userDto) {
 		User user = User.of(
-				userDto.getUserId(),
+				userDto.getUserName(),
 				passwordEncoder.encode(userDto.getUserPassword()),
-				userDto.getUserName()
+				userDto.getUserId()
 		);
 		userRepository.save(user);
 		return UserDto.toDto(user);
