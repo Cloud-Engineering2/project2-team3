@@ -4,7 +4,7 @@
     <nav class="nav-links">
       <div sec:authorize="isAuthenticated()">
         <span th:text="${#authentication.name}">사용자명</span>
-        <form th:action="@{users/logout}" method="post" style="display: inline;">
+        <form th:action="@{/users/logout}" method="post" style="display: inline;">
           <button type="submit" class="logout-btn">로그아웃</button>
         </form>
       </div>
