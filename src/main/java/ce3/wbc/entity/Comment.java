@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,13 +30,21 @@ public class Comment extends AuditingFields {
 
 
     //연관 관계
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "rest_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rest_id", nullable = true) //?
     private Restaurant restaurant;
 
+    //연관관계 편의 메서드
+    public void assignToRestaurant(Restaurant restaurant) {
+        if (restaurant == null) {
+            throw new IllegalArgumentException("댓글은 반드시 특정 레스토랑에 속해야 합니다.");
+        }
+        this.restaurant = restaurant;
+    }
+
     //연관 관계
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "user_id", nullable = true) // ?
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User user;
 
@@ -41,6 +52,28 @@ public class Comment extends AuditingFields {
     public static Comment of(String commContent, String commStar, Restaurant restaurant, User user) {
         return new Comment(null, commContent, commStar, restaurant, user);
     }
+    
+    public Comment update(Integer commId, String commContent, String commStar) {
+		this.commContent = commContent;
+		this.commStar = commStar;
+    	return null;
+    	
+    }
 
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Comment comment = (Comment) o;
+        return getCommId() != null && Objects.equals(getCommId(), comment.getCommId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }
 

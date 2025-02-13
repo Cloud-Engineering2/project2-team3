@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" href="/wbc_logo.png" type="image/x-icon">
+    <title>Error 400</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <style>
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			text-align: center;
+			font-family: Arial, sans-serif;
+		}
+		.error-page {
+			max-width: 600px;
+		}
+		h3 {
+			font-size: 32px;
+			color: #333;
+			margin-bottom: 10px;
+		}
+		h5 {
+			font-size: 18px;
+			color: #666;
+		}
+		.button {
+			display: inline-block;
+			background: black;
+			color: white;
+			padding: 10px 20px;
+			margin-top: 20px;
+			border-radius: 5px;
+			text-decoration: none;
+			font-size: 16px;
+			font-weight: bold;
+		}
+		.button:hover {
+			background: #333;
+		}
+    </style>
+</head>
+<body>
+<div class="error-page">
+    <h3>400 : Bad Request</h3>
+    <h5>잘못된 요청입니다.</h5>
+    <a th:href="@{/chefs}" class="button">메인으로 돌아가기</a>
+</div>
+</body>
+</html>

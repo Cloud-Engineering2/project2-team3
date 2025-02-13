@@ -9,22 +9,25 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Builder
 public class ChefDto  {
-    Integer chefId;
-    String chefName;
-    String chefCategory;
-    String chefImage;
+    private Integer chefId;
+    private String chefName;
+    private String chefCategory;
+    private String chefImage;
+    private String originalImgName;
 
     public static ChefDto toDto(Chef chef) {
         if (chef == null) {
-            return new ChefDto(-1, "없어용", "W/B", "default.jpg");
+            return new ChefDto(-1, "없어용", "W/B", "default.jpg","default");
         }
         return ChefDto.builder()
                 .chefId(chef.getChefId())
                 .chefName(chef.getChefName())
                 .chefCategory(chef.getChefCategory())
                 .chefImage(chef.getChefImage())
+                .originalImgName(chef.getOriginalImgName())
                 .build();
     }
 
@@ -32,8 +35,12 @@ public class ChefDto  {
         return Chef.of(
                 chefDto.getChefName(),
                 chefDto.getChefCategory(),
-                chefDto.getChefImage()
+                chefDto.getChefImage(),
+                chefDto.getOriginalImgName()
         );
     }
 
+    public static ChefDto of(String chefName, String chefCategory, String chefImage, String originalImgName) {
+        return new ChefDto(null,chefName, chefCategory, chefImage, originalImgName);
+    }
 }

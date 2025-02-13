@@ -25,7 +25,7 @@ public class S3Config {
     @Bean
     public S3Client s3client() {
 
-    	// S3 사용 인증 객체
+        // S3 사용 인증 객체
         //AWSCredentials  credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
 
         // 리전 정보 입력 -> S3 사용 객체 생성
