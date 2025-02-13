@@ -33,9 +33,7 @@ public class SecurityConfig {
         security.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
-                        .httpStrictTransportSecurity(hsts -> hsts.includeSubDomains(true)
-                                .maxAgeInSeconds(2592000))); //30일
+                        .httpStrictTransportSecurity(hsts -> hsts.disable())); //30일
         //인가
         security.authorizeHttpRequests((authorize ->
                 authorize
