@@ -31,7 +31,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         security.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable());
+                .cors(cors -> cors.disable())
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
+                        .httpStrictTransportSecurity(hsts -> hsts.includeSubDomains(true)
+                                .maxAgeInSeconds(2592000))); //30일
         //인가
         security.authorizeHttpRequests((authorize ->
                 authorize
@@ -71,6 +75,10 @@ public class SecurityConfig {
                 .sessionFixation().migrateSession()
                 .maximumSessions(2)
                 .expiredUrl("/login"));
+        security.requiresChannel(channel -> channel
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure()
+        );
 
         return security.build();
     }
